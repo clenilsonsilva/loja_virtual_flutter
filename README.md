@@ -1,2 +1,3 @@
-# loja_virtual_flutter
-Flutter course
+# loja_virtual
+
+A new Flutter project.
