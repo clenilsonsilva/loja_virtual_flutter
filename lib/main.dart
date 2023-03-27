@@ -4,6 +4,7 @@ import 'package:loja_virtual/models/user_manager.dart';
 import 'package:provider/provider.dart';
 
 import 'screen/base/base_screen.dart';
+import 'screen/sign_up/signup_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,16 +21,23 @@ class MyApp extends StatelessWidget {
       create: (context) => UserManager(),
       child: MaterialApp(
         title: 'Loja do Clenilson',
-        home: BaseScreen(),
+        initialRoute: '/base',
+        onGenerateRoute: (settings) {
+          switch (settings.name) {
+            case '/signup':
+              return MaterialPageRoute(builder: (_) => SignUpScreen());
+            case '/base':
+            default:
+              return MaterialPageRoute(builder: (_) => BaseScreen());
+          }
+        },
         theme: ThemeData(
-          primaryColor: const Color.fromARGB(255, 4, 125, 141),
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-          scaffoldBackgroundColor: const Color.fromARGB(255, 4, 125, 141),
-          appBarTheme: const AppBarTheme(
-            elevation: 0
-          )
-        ),
+            primaryColor: const Color.fromARGB(255, 4, 125, 141),
+            visualDensity: VisualDensity.adaptivePlatformDensity,
+            scaffoldBackgroundColor: const Color.fromARGB(255, 4, 125, 141),
+            appBarTheme: const AppBarTheme(elevation: 0)),
       ),
     );
   }
 }
+

@@ -20,6 +20,16 @@ class LoginScreen extends StatelessWidget {
         title: const Text('Entrar'),
         centerTitle: true,
         backgroundColor: Theme.of(context).primaryColor,
+        actions: [
+          TextButton(
+              onPressed: () {
+                Navigator.of(context).pushReplacementNamed('/signup');
+              },
+              child: const Text(
+                'CRIAR CONTA',
+                style: TextStyle(fontSize: 14, color: Colors.white),
+              ))
+        ],
       ),
       body: Center(
         child: Card(
@@ -81,30 +91,37 @@ class LoginScreen extends StatelessWidget {
                         height: 40,
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                              backgroundColor: value.loading ? Colors.grey[700] : Theme.of(context).primaryColor),
-                          onPressed: value.loading ? null : () {
-                            if (formKey.currentState!.validate()) {
-                              value.signIn(
-                                  user: Userr(emailController.text,
-                                      passController.text),
-                                  onFail: (e) {
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(SnackBar(
-                                      content: Text('Falha ao entrar: $e'),
-                                      backgroundColor: Colors.red,
-                                    ));
-                                  },
-                                  onSucess: () {
-                                    // TODO: FECHAR TELA DE LOGIN
-                                  });
-                            }
-                          },
-                          child: value.loading ? const CircularProgressIndicator(
-                            valueColor: AlwaysStoppedAnimation(Colors.white),
-                          ) : const Text(
-                            'Entrar',
-                            style: TextStyle(fontSize: 18),
-                          ),
+                              backgroundColor: value.loading
+                                  ? Colors.grey[700]
+                                  : Theme.of(context).primaryColor),
+                          onPressed: value.loading
+                              ? null
+                              : () {
+                                  if (formKey.currentState!.validate()) {
+                                    value.signIn(
+                                        user: Userr({emailController.text, passController.text}),
+                                        onFail: (e) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(SnackBar(
+                                            content:
+                                                Text('Falha ao entrar: $e'),
+                                            backgroundColor: Colors.red,
+                                          ));
+                                        },
+                                        onSucess: () {
+                                          // TODO: FECHAR TELA DE LOGIN
+                                        });
+                                  }
+                                },
+                          child: value.loading
+                              ? const CircularProgressIndicator(
+                                  valueColor:
+                                      AlwaysStoppedAnimation(Colors.white),
+                                )
+                              : const Text(
+                                  'Entrar',
+                                  style: TextStyle(fontSize: 18),
+                                ),
                         ),
                       ),
                     ],
