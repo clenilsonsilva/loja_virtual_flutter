@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:loja_virtual/helpers/validators.dart';
+import 'package:provider/provider.dart';
 
 import '../../models/user.dart';
+import '../../models/user_manager.dart';
 
 class SignUpScreen extends StatelessWidget {
   SignUpScreen({super.key});
@@ -106,6 +108,21 @@ class SignUpScreen extends StatelessWidget {
                           return;
                         }
                       }
+                      context.read<UserManager>().singUp(
+                        user,
+                        (e) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('Falha ao cadastrar: $e'),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                        },
+                        () {
+                          debugPrint('Sucesso');
+                          //TODO: POP
+                        },
+                      );
                     },
                     child: const Text(
                       'Criar Conta',
