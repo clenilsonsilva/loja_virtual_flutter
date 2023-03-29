@@ -1,9 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:loja_virtual/models/user_manager.dart';
 import 'package:provider/provider.dart';
 
+import 'models/user_manager.dart';
 import 'screen/base/base_screen.dart';
+import 'screen/login/login_screen.dart';
 import 'screen/sign_up/signup_screen.dart';
 
 Future<void> main() async {
@@ -18,12 +19,15 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
+      lazy: false,
       create: (context) => UserManager(),
       child: MaterialApp(
         title: 'Loja do Clenilson',
         initialRoute: '/base',
         onGenerateRoute: (settings) {
           switch (settings.name) {
+            case '/login':
+              return MaterialPageRoute(builder: (_) => LoginScreen());
             case '/signup':
               return MaterialPageRoute(builder: (_) => SignUpScreen());
             case '/base':

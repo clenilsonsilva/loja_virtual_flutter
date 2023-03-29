@@ -9,7 +9,7 @@ class SignUpScreen extends StatelessWidget {
   SignUpScreen({super.key});
   final formKey = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  final user = Userr({});
+  final user = Userr();
 
   @override
   Widget build(BuildContext context) {
@@ -119,8 +119,7 @@ class SignUpScreen extends StatelessWidget {
                           );
                         },
                         () {
-                          debugPrint('Sucesso');
-                          //TODO: POP
+                          Navigator.of(context).pop();
                         },
                       );
                     },

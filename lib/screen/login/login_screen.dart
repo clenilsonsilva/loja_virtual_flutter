@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:loja_virtual/helpers/validators.dart';
 import 'package:provider/provider.dart';
@@ -99,8 +101,8 @@ class LoginScreen extends StatelessWidget {
                               : () {
                                   if (formKey.currentState!.validate()) {
                                     value.signIn(
-                                        user: Userr({emailController.text, passController.text}),
-                                        onFail: (e) {
+                                        Userr(email: emailController.text, pass: passController.text),
+                                        (e) {
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(SnackBar(
                                             content:
@@ -108,8 +110,8 @@ class LoginScreen extends StatelessWidget {
                                             backgroundColor: Colors.red,
                                           ));
                                         },
-                                        onSucess: () {
-                                          // TODO: FECHAR TELA DE LOGIN
+                                        () {
+                                          Navigator.of(context).pop();
                                         });
                                   }
                                 },

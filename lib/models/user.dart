@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Userr {
-  Userr(Set<String> set,
+  Userr(
       {this.email = '',
       this.pass = '',
       this.confirmPassword = '',

@@ -12,27 +12,33 @@ class UserManager extends ChangeNotifier {
     _loadCurrentUser();
   }
 
-  late Userr usuario;
+  Userr? usuario;
+
+  bool get isLoggedIn => usuario != null;
 
   final auth = FirebaseAuth.instance;
   final firestore = FirebaseFirestore.instance;
   bool _loading = false;
   bool get loading => _loading;
 
-  Future<void> signIn(
-      {required Userr user,
-      required Function onFail,
-      required Function onSucess}) async {
+  Future<void> signIn(Userr user, Function onFail, Function onSucess) async {
     loading = true;
     try {
       final authResult = await auth.signInWithEmailAndPassword(
           email: user.email, password: user.pass);
       await _loadCurrentUser(user: authResult.user);
       onSucess();
+      notifyListeners();
     } on FirebaseAuthException catch (e) {
       onFail(getErrorString(e.code));
     }
     loading = false;
+  }
+
+  void signOut() {
+    auth.signOut();
+    usuario = null;
+    notifyListeners();
   }
 
   set loading(bool value) {
@@ -62,6 +68,7 @@ class UserManager extends ChangeNotifier {
       await user.saveData();
 
       onSucess();
+      notifyListeners();
 
     } on PlatformException catch (e) {
       onFail(getErrorString(e.code));
