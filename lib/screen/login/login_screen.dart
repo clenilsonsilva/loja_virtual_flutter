@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:loja_virtual/helpers/validators.dart';
 import 'package:provider/provider.dart';

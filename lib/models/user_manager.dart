@@ -56,7 +56,7 @@ class UserManager extends ChangeNotifier {
   }
 
   Future<void> singUp(Userr user, Function onFail, Function onSucess) async {
-    _loading = true;
+    loading = true;
     try {
       final result = await auth.createUserWithEmailAndPassword(
           email: user.email, password: user.pass);
@@ -73,6 +73,6 @@ class UserManager extends ChangeNotifier {
     } on PlatformException catch (e) {
       onFail(getErrorString(e.code));
     }
-    _loading = false;
+    loading = false;
   }
 }
