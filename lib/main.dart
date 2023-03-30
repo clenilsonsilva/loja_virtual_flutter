@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'models/product_manager.dart';
 import 'models/user_manager.dart';
 import 'screen/base/base_screen.dart';
 import 'screen/login/login_screen.dart';
@@ -18,9 +19,17 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      lazy: false,
-      create: (context) => UserManager(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => UserManager(),
+          lazy: false,
+        ),
+        ChangeNotifierProvider(
+          create: (_) => ProductManager(),
+          lazy: false,
+        )
+      ],
       child: MaterialApp(
         title: 'Loja do Clenilson',
         initialRoute: '/base',
@@ -44,4 +53,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-

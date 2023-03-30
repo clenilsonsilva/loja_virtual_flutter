@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../common/Custom_drawer/custom_drawer.dart';
 import '../../models/page_manager.dart';
 import '../login/login_screen.dart';
+import '../products/products_screen.dart';
 
 class BaseScreen extends StatelessWidget {
   BaseScreen({super.key});
@@ -24,12 +25,7 @@ class BaseScreen extends StatelessWidget {
               title: const Text('Home2'),
             ),
           ),
-          Scaffold(
-            drawer:  CustomDrawer(),
-            appBar: AppBar(
-              title: const Text('Home3'),
-            ),
-          ),
+          ProductsScreen(),
           Scaffold(
             drawer:  CustomDrawer(),
             appBar: AppBar(
