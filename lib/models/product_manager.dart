@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 
-import 'products.dart';
+import 'product.dart';
 
 class ProductManager extends ChangeNotifier {
   ProductManager() {

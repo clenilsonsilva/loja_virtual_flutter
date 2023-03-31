@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../models/products.dart';
+import '../../../models/product.dart';
 
 class ProductsListTile extends StatelessWidget {
   const ProductsListTile({super.key, required this.product});

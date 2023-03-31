@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'models/product_manager.dart';
-import 'models/products.dart';
+import 'models/product.dart';
 import 'models/user_manager.dart';
 import 'screen/base/base_screen.dart';
 import 'screen/login/login_screen.dart';
