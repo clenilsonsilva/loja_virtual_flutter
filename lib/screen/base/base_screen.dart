@@ -20,16 +20,18 @@ class BaseScreen extends StatelessWidget {
         children: [
           // LoginScreen(),
           Scaffold(
-            drawer:  CustomDrawer(),
+            drawer:  const CustomDrawer(),
             appBar: AppBar(
               title: const Text('Home2'),
+              backgroundColor: Theme.of(context).primaryColor,
             ),
           ),
-          ProductsScreen(),
+          const ProductsScreen(),
           Scaffold(
-            drawer:  CustomDrawer(),
+            drawer:  const CustomDrawer(),
             appBar: AppBar(
               title: const Text('Home4'),
+              backgroundColor: Theme.of(context).primaryColor,
             ),
           ),
           

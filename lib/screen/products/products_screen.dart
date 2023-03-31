@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../common/Custom_drawer/custom_drawer.dart';
 import '../../models/product_manager.dart';
 import 'components/products_list_tile.dart';
+import 'components/search_dialog.dart';
 
 class ProductsScreen extends StatelessWidget {
   const ProductsScreen({super.key});
@@ -13,16 +14,70 @@ class ProductsScreen extends StatelessWidget {
     return Scaffold(
         drawer: const CustomDrawer(),
         appBar: AppBar(
-          title: const Text('Produtos'),
+          title: Consumer<ProductManager>(
+            builder: (context, value, child) {
+              if (value.search.isEmpty) {
+                return const Text('Produtos');
+              } else {
+                return LayoutBuilder(builder: (_, constraint) {
+                  return GestureDetector(
+                    child: SizedBox(
+                      width: constraint.biggest.width,
+                      child: Text(
+                        value.search,
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    onTap: () async {
+                      final search = await showDialog(
+                          context: context,
+                          builder: (_) =>  SearchDialog(initialText: value.search,));
+                      if (search != null) {
+                        value.search = search;
+                      }
+                    },
+                  );
+                });
+              }
+            },
+          ),
           centerTitle: true,
+          backgroundColor: Theme.of(context).primaryColor,
+          actions: [
+            Consumer<ProductManager>(
+              builder: (context, value, child) {
+                if (value.search.isEmpty) {
+                  return IconButton(
+                    onPressed: () async {
+                      final search = await showDialog(
+                          context: context,
+                          builder: (_) => SearchDialog(initialText: value.search,));
+                      if (search != null) {
+                        value.search = search;
+                      }
+                    },
+                    icon: const Icon(Icons.search),
+                  );
+                } else {
+                  return IconButton(
+                    onPressed: () async {
+                      value.search = '';
+                    },
+                    icon: const Icon(Icons.close),
+                  );
+                }
+              },
+            )
+          ],
         ),
         body: Consumer<ProductManager>(
           builder: (context, value, child) {
+            final filteredProducts = value.filteredProducts;
             return ListView.builder(
               padding: const EdgeInsets.all(4),
-              itemCount: value.allProducts.length,
+              itemCount: filteredProducts.length,
               itemBuilder: (_, index) {
-                return ProductsListTile(product: value.allProducts[index]);
+                return ProductsListTile(product: filteredProducts[index]);
               },
             );
           },
