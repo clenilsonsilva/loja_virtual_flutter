@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'models/cart_manager.dart';
 import 'models/product_manager.dart';
 import 'models/product.dart';
 import 'models/user_manager.dart';
@@ -30,7 +31,11 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => ProductManager(),
           lazy: false,
-        )
+        ),
+        Provider(
+          create: (_) => CartManage(),
+          lazy: false,
+        ),
       ],
       child: MaterialApp(
         title: 'Loja do Clenilson',
