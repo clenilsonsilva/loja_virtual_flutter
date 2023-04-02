@@ -7,6 +7,7 @@ import 'models/product_manager.dart';
 import 'models/product.dart';
 import 'models/user_manager.dart';
 import 'screen/base/base_screen.dart';
+import 'screen/cart/cart_screen.dart';
 import 'screen/login/login_screen.dart';
 import 'screen/product/product_screen.dart';
 import 'screen/sign_up/signup_screen.dart';
@@ -32,8 +33,9 @@ class MyApp extends StatelessWidget {
           create: (_) => ProductManager(),
           lazy: false,
         ),
-        Provider(
-          create: (_) => CartManage(),
+        ProxyProvider<UserManager, CartManager>(
+          update: (context, userManger, cartManager) => cartManager!..updateUser(userManger),
+          create: (_) => CartManager(),
           lazy: false,
         ),
       ],
@@ -46,6 +48,8 @@ class MyApp extends StatelessWidget {
               return MaterialPageRoute(builder: (_) => LoginScreen());
             case '/signup':
               return MaterialPageRoute(builder: (_) => SignUpScreen());
+            case '/cart':
+              return MaterialPageRoute(builder: (_) => const CartScreen());
             case '/product':
               return MaterialPageRoute(
                   builder: (_) => ProductScreen(

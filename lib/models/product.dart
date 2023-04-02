@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'item_size.dart';
 
-class Product extends ChangeNotifier{
+class Product extends ChangeNotifier {
   Product.fromDocument(DocumentSnapshot doc) {
     id = doc.id;
     name = doc['name'];
@@ -25,7 +25,8 @@ class Product extends ChangeNotifier{
   late List<String> images;
   late List<ItemSize> sizes;
 
-  ItemSize _selectedSize = ItemSize.fromMap({'name': '', 'price': 0, 'stock': 0});
+  ItemSize _selectedSize =
+      ItemSize.fromMap({'name': '', 'price': 0, 'stock': 0});
   ItemSize get selectedSize => _selectedSize;
 
   set selectedSize(ItemSize valor) {
@@ -35,14 +36,21 @@ class Product extends ChangeNotifier{
 
   int get totalStock {
     int stock = 0;
-    for(final size in sizes) {
+    for (final size in sizes) {
       stock += size.stock;
     }
     return stock;
   }
 
-  bool get hasStock{
+  bool get hasStock {
     return totalStock > 0;
   }
 
+  ItemSize? findSize(String name) {
+    try {
+      return sizes.firstWhere((s) => s.name == name);
+    } on Exception catch (e) {
+      return null;
+    }
+  }
 }

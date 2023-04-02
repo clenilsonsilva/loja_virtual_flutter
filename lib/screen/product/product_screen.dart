@@ -115,7 +115,8 @@ class ProductScreen extends StatelessWidget {
                                       ? null
                                       : () {
                                           if (userManager.isLoggedIn) {
-                                            context.read<CartManage>().addToCart(product);
+                                            context.read<CartManager>().addToCart(product);
+                                            Navigator.of(context).pushNamed('/cart');
                                           } else {
                                             Navigator.of(context)
                                                 .pushNamed('/login');
