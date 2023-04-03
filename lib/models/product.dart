@@ -49,8 +49,9 @@ class Product extends ChangeNotifier {
   ItemSize? findSize(String name) {
     try {
       return sizes.firstWhere((s) => s.name == name);
-    } on Exception catch (e) {
+    } on Exception {
       return null;
     }
   }
+
 }

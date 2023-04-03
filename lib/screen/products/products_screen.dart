@@ -12,75 +12,88 @@ class ProductsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        drawer: const CustomDrawer(),
-        appBar: AppBar(
-          title: Consumer<ProductManager>(
+      drawer: const CustomDrawer(),
+      appBar: AppBar(
+        title: Consumer<ProductManager>(
+          builder: (context, value, child) {
+            if (value.search.isEmpty) {
+              return const Text('Produtos');
+            } else {
+              return LayoutBuilder(builder: (_, constraint) {
+                return GestureDetector(
+                  child: SizedBox(
+                    width: constraint.biggest.width,
+                    child: Text(
+                      value.search,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  onTap: () async {
+                    final search = await showDialog(
+                        context: context,
+                        builder: (_) => SearchDialog(
+                              initialText: value.search,
+                            ));
+                    if (search != null) {
+                      value.search = search;
+                    }
+                  },
+                );
+              });
+            }
+          },
+        ),
+        centerTitle: true,
+        backgroundColor: Theme.of(context).primaryColor,
+        actions: [
+          Consumer<ProductManager>(
             builder: (context, value, child) {
               if (value.search.isEmpty) {
-                return const Text('Produtos');
+                return IconButton(
+                  onPressed: () async {
+                    final search = await showDialog(
+                        context: context,
+                        builder: (_) => SearchDialog(
+                              initialText: value.search,
+                            ));
+                    if (search != null) {
+                      value.search = search;
+                    }
+                  },
+                  icon: const Icon(Icons.search),
+                );
               } else {
-                return LayoutBuilder(builder: (_, constraint) {
-                  return GestureDetector(
-                    child: SizedBox(
-                      width: constraint.biggest.width,
-                      child: Text(
-                        value.search,
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                    onTap: () async {
-                      final search = await showDialog(
-                          context: context,
-                          builder: (_) =>  SearchDialog(initialText: value.search,));
-                      if (search != null) {
-                        value.search = search;
-                      }
-                    },
-                  );
-                });
+                return IconButton(
+                  onPressed: () async {
+                    value.search = '';
+                  },
+                  icon: const Icon(Icons.close),
+                );
               }
             },
-          ),
-          centerTitle: true,
-          backgroundColor: Theme.of(context).primaryColor,
-          actions: [
-            Consumer<ProductManager>(
-              builder: (context, value, child) {
-                if (value.search.isEmpty) {
-                  return IconButton(
-                    onPressed: () async {
-                      final search = await showDialog(
-                          context: context,
-                          builder: (_) => SearchDialog(initialText: value.search,));
-                      if (search != null) {
-                        value.search = search;
-                      }
-                    },
-                    icon: const Icon(Icons.search),
-                  );
-                } else {
-                  return IconButton(
-                    onPressed: () async {
-                      value.search = '';
-                    },
-                    icon: const Icon(Icons.close),
-                  );
-                }
-              },
-            )
-          ],
-        ),
-        body: Consumer<ProductManager>(
-          builder: (context, value, child) {
-            final filteredProducts = value.filteredProducts;
-            return ListView.builder(
-              padding: const EdgeInsets.all(4),
-              itemCount: filteredProducts.length,
-              itemBuilder: (_, index) {
-                return ProductsListTile(product: filteredProducts[index]);
-              },
-            );
-          },
-        ));
+          )
+        ],
+      ),
+      body: Consumer<ProductManager>(
+        builder: (context, value, child) {
+          final filteredProducts = value.filteredProducts;
+          return ListView.builder(
+            padding: const EdgeInsets.all(4),
+            itemCount: filteredProducts.length,
+            itemBuilder: (_, index) {
+              return ProductsListTile(product: filteredProducts[index]);
+            },
+          );
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.of(context).pushNamed('/cart');
+        },
+        backgroundColor: Colors.white,
+        foregroundColor: Theme.of(context).primaryColor,
+        child: const Icon(Icons.shopping_cart),
+      ),
+    );
   }
 }
