@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../common/price_card.dart';
 import '../../models/cart_manager.dart';
 import 'components/cart_tile.dart';
 
@@ -17,12 +18,20 @@ class CartScreen extends StatelessWidget {
       ),
       body: Consumer<CartManager>(
         builder: (context, cartManager, child) {
-          return Column(
-              children: cartManager.items
-                  .map((cartProduct) => CartTile(
-                        cartProduct: cartProduct,
-                      ))
-                  .toList());
+          return ListView(
+            children: [
+              Column(
+                  children: cartManager.items
+                      .map((cartProduct) => CartTile(
+                            cartProduct: cartProduct,
+                          ))
+                      .toList()),
+              PriceCard(
+                buttonText: 'Continuar para Entrega',
+                onPressed: cartManager.isCartValid ? () {} : null
+              ),
+            ],
+          );
         },
       ),
     );
