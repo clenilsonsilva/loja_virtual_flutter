@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../common/Custom_drawer/custom_drawer.dart';
 import '../../models/page_manager.dart';
 import '../../models/user_manager.dart';
+import '../admin_users/admin_users_screen.dart';
 import '../home/home_screen.dart';
 import '../products/products_screen.dart';
 
@@ -38,13 +39,7 @@ class BaseScreen extends StatelessWidget {
                 ),
               ),
               if (userManager.adminEnabled) ...[
-                Scaffold(
-                  drawer: const CustomDrawer(),
-                  appBar: AppBar(
-                    title: const Text('Usuarios'),
-                    backgroundColor: Theme.of(context).primaryColor,
-                  ),
-                ),
+                AdminUsersScreen(),
                 Scaffold(
                   drawer: const CustomDrawer(),
                   appBar: AppBar(
