@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'models/cart_manager.dart';
+import 'models/home_manager.dart';
 import 'models/product.dart';
 import 'models/product_manager.dart';
 import 'models/user_manager.dart';
@@ -33,6 +34,10 @@ class MyApp extends StatelessWidget {
           create: (_) => CartManager(),
           lazy: false,
         ),
+        ChangeNotifierProvider(
+          create: (_) => HomeManager(),
+          lazy: false,
+        )
       ],
       //MATERIAL APP
       child: MaterialApp(

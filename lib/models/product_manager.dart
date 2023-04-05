@@ -12,7 +12,7 @@ class ProductManager extends ChangeNotifier {
 
   List<Product> allProducts = [];
 
-  String _search = ''; 
+  String _search = '';
   String get search => _search;
 
   set search(String value) {
@@ -25,7 +25,8 @@ class ProductManager extends ChangeNotifier {
     if (search.isEmpty) {
       filteredProducts.addAll(allProducts);
     } else {
-      filteredProducts.addAll(allProducts.where((p) => p.name.toLowerCase().contains(search.toLowerCase())));
+      filteredProducts.addAll(allProducts
+          .where((p) => p.name.toLowerCase().contains(search.toLowerCase())));
     }
     return filteredProducts;
   }
@@ -36,5 +37,13 @@ class ProductManager extends ChangeNotifier {
     allProducts =
         snapProducts.docs.map((d) => Product.fromDocument(d)).toList();
     notifyListeners();
+  }
+
+  Product? findProductByID(String id) {
+    try {
+      return allProducts.firstWhere((p) => p.id == id);
+    } on Exception {
+      return null;
+    }
   }
 }

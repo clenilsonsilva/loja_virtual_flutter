@@ -6,10 +6,10 @@ import 'product.dart';
 
 class CartProduct extends ChangeNotifier {
   CartProduct.fromProduct(this.product) {
-    id = product.id;
-    productId = product.id;
+    id = product != null ? product!.id : '';
+    productId = product != null ? product!.id : '';
     quantity = 1;
-    size = product.selectedSize.name;
+    size = product != null ? product!.selectedSize.name : '';
   }
 
   final firestore = FirebaseFirestore.instance;
@@ -32,18 +32,18 @@ class CartProduct extends ChangeNotifier {
   late int quantity;
   late String size;
 
-  late Product product;
+  Product? product;
 
   ItemSize? get itemSize {
-    if (product.id.isNotEmpty) {
-      return product.findSize(size);
+    if (product != null) {
+      return product!.findSize(size);
     } else {
       return null;
     }
   }
 
   num get unitPrice {
-    if (product.id.isNotEmpty) {
+    if (product != null) {
       return itemSize!.price;
     } else {
       return 0;
