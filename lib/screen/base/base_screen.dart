@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../common/Custom_drawer/custom_drawer.dart';
 import '../../models/page_manager.dart';
+import '../../models/user_manager.dart';
 import '../home/home_screen.dart';
 import '../products/products_screen.dart';
 
@@ -14,21 +15,47 @@ class BaseScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Provider(
       create: (context) => PageManager(pageController),
-      child: PageView(
-        controller: pageController,
-        physics: const NeverScrollableScrollPhysics(),
-        children: [
-          const HomeScreen(),
-          const ProductsScreen(),
-          Scaffold(
-            drawer:  const CustomDrawer(),
-            appBar: AppBar(
-              title: const Text('Home4'),
-              backgroundColor: Theme.of(context).primaryColor,
-            ),
-          ),
-          
-        ],
+      child: Consumer<UserManager>(
+        builder: (context, userManager, child) {
+          return PageView(
+            controller: pageController,
+            physics: const NeverScrollableScrollPhysics(),
+            children: [
+              const HomeScreen(),
+              const ProductsScreen(),
+              Scaffold(
+                drawer: const CustomDrawer(),
+                appBar: AppBar(
+                  title: const Text('Home3'),
+                  backgroundColor: Theme.of(context).primaryColor,
+                ),
+              ),
+              Scaffold(
+                drawer: const CustomDrawer(),
+                appBar: AppBar(
+                  title: const Text('Home4'),
+                  backgroundColor: Theme.of(context).primaryColor,
+                ),
+              ),
+              if (userManager.adminEnabled) ...[
+                Scaffold(
+                  drawer: const CustomDrawer(),
+                  appBar: AppBar(
+                    title: const Text('Usuarios'),
+                    backgroundColor: Theme.of(context).primaryColor,
+                  ),
+                ),
+                Scaffold(
+                  drawer: const CustomDrawer(),
+                  appBar: AppBar(
+                    title: const Text('Pedidos'),
+                    backgroundColor: Theme.of(context).primaryColor,
+                  ),
+                ),
+              ]
+            ],
+          );
+        },
       ),
     );
   }

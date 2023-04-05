@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:loja_virtual/common/Custom_drawer/custom_drawer_header.dart';
-import 'package:loja_virtual/common/Custom_drawer/drawer_tile.dart';
+import 'package:loja_virtual/models/user_manager.dart';
+import 'package:provider/provider.dart';
+
+import 'custom_drawer_header.dart';
+import 'drawer_tile.dart';
 
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({super.key});
@@ -23,29 +26,50 @@ class CustomDrawer extends StatelessWidget {
             ),
           ),
           ListView(
-            children: const [
-              CustomDrawerHeader(),
-              Divider(),
-              DrawerTile(
+            children: [
+              const CustomDrawerHeader(),
+              const Divider(),
+              const DrawerTile(
                 icondata: Icons.home,
                 title: 'Inicio',
                 page: 0,
               ),
-              DrawerTile(
+              const DrawerTile(
                 icondata: Icons.list,
                 title: 'Produtos',
                 page: 1,
               ),
-              DrawerTile(
+              const DrawerTile(
                 icondata: Icons.playlist_add_check,
                 title: 'Meus pedidos',
                 page: 2,
               ),
-              DrawerTile(
+              const DrawerTile(
                 icondata: Icons.location_on,
                 title: 'Lojas',
                 page: 3,
               ),
+              Consumer<UserManager>(builder: (context, userManager, child) {
+                if (userManager.adminEnabled) {
+                  return Column(
+                    children: const [
+                      Divider(),
+                      DrawerTile(
+                        icondata: Icons.settings,
+                        title: 'Usuarios',
+                        page: 4,
+                      ),
+                      DrawerTile(
+                        icondata: Icons.settings,
+                        title: 'Pedidos',
+                        page: 5,
+                      ),
+                    ],
+                  );
+                } else {
+                  return  Container();
+                }
+              })
             ],
           ),
         ],

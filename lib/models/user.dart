@@ -21,6 +21,7 @@ class Userr {
   late String pass;
   late String name;
   late String confirmPassword;
+  bool admin = false;
 
 
   DocumentReference get firestorRef => FirebaseFirestore.instance.doc('users/$id');

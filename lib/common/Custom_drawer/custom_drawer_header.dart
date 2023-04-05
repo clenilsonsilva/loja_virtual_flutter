@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loja_virtual/models/page_manager.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/user_manager.dart';
@@ -30,6 +31,7 @@ class CustomDrawerHeader extends StatelessWidget {
               GestureDetector(
                 onTap: () {
                   if(value.isLoggedIn) {
+                    context.read<PageManager>().setPage(0);
                     value.signOut();
                   }
                   else{
