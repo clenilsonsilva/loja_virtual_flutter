@@ -35,7 +35,6 @@ class AdminUsersScreen extends StatelessWidget {
               },
               indexedHeight: (index) => 100,
               strList: adminUserManager.names,
-              showPreview: true,
             );
           },
         ));

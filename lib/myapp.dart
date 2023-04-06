@@ -9,6 +9,7 @@ import 'models/product_manager.dart';
 import 'models/user_manager.dart';
 import 'screen/base/base_screen.dart';
 import 'screen/cart/cart_screen.dart';
+import 'screen/edit_product/edit_product_screen.dart';
 import 'screen/login/login_screen.dart';
 import 'screen/product/product_screen.dart';
 import 'screen/sign_up/signup_screen.dart';
@@ -43,10 +44,11 @@ class MyApp extends StatelessWidget {
           create: (_) => AdminUsersManager(),
           lazy: false,
           update: (context, userManager, adminUsersManager) => adminUsersManager!..updateUser(userManager),
-        )
+        ),
       ],
       //MATERIAL APP
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'Loja do Clenilson',
         initialRoute: '/base',
         onGenerateRoute: (settings) {
@@ -62,6 +64,8 @@ class MyApp extends StatelessWidget {
                   builder: (_) => ProductScreen(
                         product: settings.arguments as Product,
                       ));
+            case '/edit_product':
+              return MaterialPageRoute(builder: (_) => EditProductScreen(product: settings.arguments as Product));
             case '/base':
             default:
               return MaterialPageRoute(builder: (_) => BaseScreen());

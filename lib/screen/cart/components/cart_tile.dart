@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:loja_virtual/common/custom_iconbutton.dart';
 import 'package:loja_virtual/models/cart_product.dart';

@@ -41,7 +41,7 @@ class CartManager extends ChangeNotifier {
       user!.cartReference
           .add(cartProduct.toCardItemMap())
           .then((doc) => cartProduct.id = doc.id);
-      _onItemUpdated;
+      _onItemUpdated();
     }
     notifyListeners();
   }
@@ -67,13 +67,13 @@ class CartManager extends ChangeNotifier {
           .doc(cartProduct.id)
           .update(cartProduct.toCardItemMap());
     }
+    notifyListeners();
   }
 
   void removeOfCart(CartProduct cartProduct) {
     items.removeWhere((p) => p.id == cartProduct.id);
     user!.cartReference.doc(cartProduct.id).delete();
     cartProduct.removeListener(_onItemUpdated);
-    notifyListeners();
   }
 
   bool get isCartValid {

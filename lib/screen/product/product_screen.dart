@@ -23,6 +23,23 @@ class ProductScreen extends StatelessWidget {
             title: Text(product.name),
             centerTitle: true,
             backgroundColor: primaryColor,
+            actions: [
+              Consumer<UserManager>(
+                builder: (context, userManager, child) {
+                  if (userManager.adminEnabled) {
+                    return IconButton(
+                      onPressed: () {
+                        Navigator.of(context).pushReplacementNamed('/edit_product', arguments: product);
+                      },
+                      icon: const Icon(Icons.edit),
+                    );
+                  }
+                  else{
+                    return const SizedBox();
+                  }
+                },
+              )
+            ],
           ),
           backgroundColor: Colors.white,
           body: ListView(
@@ -84,7 +101,7 @@ class ProductScreen extends StatelessWidget {
                       ),
                     ),
                     const Padding(
-                      padding: EdgeInsets.only(top: 8 ,bottom: 8),
+                      padding: EdgeInsets.only(top: 8, bottom: 8),
                       child: Text(
                         'Tamanhos',
                         style: TextStyle(
@@ -115,8 +132,11 @@ class ProductScreen extends StatelessWidget {
                                       ? null
                                       : () {
                                           if (userManager.isLoggedIn) {
-                                            context.read<CartManager>().addToCart(product);
-                                            Navigator.of(context).pushNamed('/cart');
+                                            context
+                                                .read<CartManager>()
+                                                .addToCart(product);
+                                            Navigator.of(context)
+                                                .pushNamed('/cart');
                                           } else {
                                             Navigator.of(context)
                                                 .pushNamed('/login');
