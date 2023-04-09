@@ -19,6 +19,8 @@ dependencies:
   transparent_image: ^2.0.1
   alphabet_list_scroll_view: ^2.0.0
   faker: ^2.1.0
+  image_picker: ^0.8.7+1
+  image_cropper: ^3.0.2
 
 dev_dependencies:
   flutter_test:
