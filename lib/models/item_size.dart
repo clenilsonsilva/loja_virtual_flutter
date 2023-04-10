@@ -15,7 +15,16 @@ class ItemSize {
   late num price;
   late int stock;
 
+
   bool get hasStock => stock > 0;
+
+  ItemSize clone() {
+    return ItemSize(
+      name: name,
+      price: price,
+      stock: stock,
+    );
+  }
 
   @override
   String toString() {

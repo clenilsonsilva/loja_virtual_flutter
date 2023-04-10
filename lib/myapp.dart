@@ -65,7 +65,7 @@ class MyApp extends StatelessWidget {
                         product: settings.arguments as Product,
                       ));
             case '/edit_product':
-              return MaterialPageRoute(builder: (_) => EditProductScreen(product: settings.arguments as Product));
+              return MaterialPageRoute(builder: (_) => EditProductScreen(settings.arguments as Product?));
             case '/base':
             default:
               return MaterialPageRoute(builder: (_) => BaseScreen());

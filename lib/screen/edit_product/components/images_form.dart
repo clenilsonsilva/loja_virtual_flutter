@@ -15,7 +15,7 @@ class ImagesForm extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return FormField<List>(
-      initialValue: List.from(product.images),
+      initialValue: product.images,
       validator: (images) {
         if (images != null) {
           if (images.isEmpty) {

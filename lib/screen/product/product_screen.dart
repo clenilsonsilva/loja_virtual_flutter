@@ -38,7 +38,7 @@ class ProductScreen extends StatelessWidget {
                     return const SizedBox();
                   }
                 },
-              )
+              ),
             ],
           ),
           backgroundColor: Colors.white,

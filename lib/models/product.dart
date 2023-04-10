@@ -18,6 +18,13 @@ class Product extends ChangeNotifier {
           ([]).map((s) => ItemSize.fromMap(s as Map<String, dynamic>)).toList();
     }
   }
+  Product({
+    this.name = '',
+    this.id = '',
+    this.description = '',
+    this.images = const[],
+    this.sizes = const[],
+  });
 
   late String id;
   late String name;
@@ -62,5 +69,15 @@ class Product extends ChangeNotifier {
       }
     }
     return lowest;
+  }
+
+  Product clone() {
+    return Product(
+      id: id,
+      name: name,
+      description: description,
+      images: List.from(images),
+      sizes: sizes.map((size) => size.clone()).toList()
+    );
   }
 }

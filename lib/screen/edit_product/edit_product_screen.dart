@@ -5,16 +5,19 @@ import 'components/images_form.dart';
 import 'components/sizes_form.dart';
 
 class EditProductScreen extends StatelessWidget {
-  EditProductScreen({super.key, required this.product});
+  EditProductScreen(Product? p, {super.key})
+      : editing = p != null,
+        product = p?.clone() ?? Product();
 
   final Product product;
   final formKey = GlobalKey<FormState>();
+  final bool editing;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Editar Anuncio'),
+        title: Text(editing ? 'Editar Anúncio' : 'Criar Anúncio'),
         centerTitle: true,
         backgroundColor: Theme.of(context).primaryColor,
       ),
@@ -77,7 +80,6 @@ class EditProductScreen extends StatelessWidget {
                           TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                     ),
                   ),
-
                   TextFormField(
                     initialValue: product.description,
                     style: const TextStyle(fontSize: 16),
@@ -98,18 +100,29 @@ class EditProductScreen extends StatelessWidget {
                       }
                     },
                   ),
-                  SizesForm(product: product,),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: Theme.of(context).primaryColor),
-                    onPressed: () {
-                      if (formKey.currentState?.validate() != null) {
-                        if (formKey.currentState!.validate()) {
-                          print('Valido');
+                  SizesForm(
+                    product: product,
+                  ),
+                  const SizedBox(height: 20),
+                  SizedBox(
+                    height: 44,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Theme.of(context).primaryColor),
+                      onPressed: () {
+                        if (formKey.currentState?.validate() != null) {
+                          if (formKey.currentState!.validate()) {
+                            print('Valido');
+                          }
                         }
-                      }
-                    },
-                    child: const Text('Salvar'),
+                      },
+                      child: const Text(
+                        'Salvar',
+                        style: TextStyle(
+                          fontSize: 18,
+                        ),
+                      ),
+                    ),
                   ),
                 ],
               ),

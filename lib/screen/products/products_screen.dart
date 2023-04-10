@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../common/Custom_drawer/custom_drawer.dart';
 import '../../models/product_manager.dart';
+import '../../models/user_manager.dart';
 import 'components/products_list_tile.dart';
 import 'components/search_dialog.dart';
 
@@ -69,6 +70,20 @@ class ProductsScreen extends StatelessWidget {
                   },
                   icon: const Icon(Icons.close),
                 );
+              }
+            },
+          ),
+          Consumer<UserManager>(
+            builder: (context, userManager, child) {
+              if (userManager.adminEnabled) {
+                return IconButton(
+                  onPressed: () {
+                    Navigator.of(context).pushNamed('/edit_product');
+                  },
+                  icon: const Icon(Icons.add),
+                );
+              } else {
+                return const SizedBox();
               }
             },
           )
