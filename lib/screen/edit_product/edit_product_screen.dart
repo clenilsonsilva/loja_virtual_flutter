@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../models/product.dart';
 import 'components/images_form.dart';
+import 'components/sizes_form.dart';
 
 class EditProductScreen extends StatelessWidget {
   EditProductScreen({super.key, required this.product});
@@ -76,6 +77,7 @@ class EditProductScreen extends StatelessWidget {
                           TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                     ),
                   ),
+
                   TextFormField(
                     initialValue: product.description,
                     style: const TextStyle(fontSize: 16),
@@ -96,6 +98,7 @@ class EditProductScreen extends StatelessWidget {
                       }
                     },
                   ),
+                  SizesForm(product: product,),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Theme.of(context).primaryColor),
