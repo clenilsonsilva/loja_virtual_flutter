@@ -15,7 +15,6 @@ class ItemSize {
   late num price;
   late int stock;
 
-
   bool get hasStock => stock > 0;
 
   ItemSize clone() {
@@ -24,6 +23,14 @@ class ItemSize {
       price: price,
       stock: stock,
     );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'name': name,
+      'price': price,
+      'stock': stock,
+    };
   }
 
   @override

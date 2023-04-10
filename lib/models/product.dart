@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 
 import 'item_size.dart';
 
@@ -22,15 +24,30 @@ class Product extends ChangeNotifier {
     this.name = '',
     this.id = '',
     this.description = '',
-    this.images = const[],
-    this.sizes = const[],
+    required this.images,
+    required this.sizes,
   });
+
+  final firestore = FirebaseFirestore.instance;
+  final FirebaseStorage storage = FirebaseStorage.instance;
+
+  DocumentReference get firestoreRef => firestore.doc('products/$id');
+  Reference get storageRef => storage.ref().child('products').child(id);
 
   late String id;
   late String name;
   late String description;
   late List<String> images;
   late List<ItemSize> sizes;
+  late List<dynamic> newImages;
+
+  bool _loading = false;
+  bool get loading => _loading;
+  set loading(bool value) {
+    _loading = value;
+    notifyListeners();
+  }
+
 
   ItemSize _selectedSize =
       ItemSize.fromMap({'name': '', 'price': 0, 'stock': 0});
@@ -71,13 +88,67 @@ class Product extends ChangeNotifier {
     return lowest;
   }
 
+  List<Map<String, dynamic>> exportSizeList() {
+    return sizes.map((size) => size.toMap()).toList();
+  }
+
+  Future<void> save() async {
+    loading = true;
+    final Map<String, dynamic> data = {
+      'name': name,
+      'description': description,
+      'sizes': exportSizeList(),
+    };
+
+    if (id.isEmpty) {
+      final doc = await firestore.collection('products').add(data);
+      id = doc.id;
+    } else {
+      await firestoreRef.update(data);
+    }
+
+    final List<String> updateImages = [];
+    for (final newImage in newImages) {
+      if (images.contains(newImage)) {
+        updateImages.add(newImage);
+      } else {
+        final UploadTask task =
+            storageRef.child(const Uuid().v1()).putFile(newImage);
+        final TaskSnapshot snapshot = await task;
+        final String url = await snapshot.ref.getDownloadURL();
+        updateImages.add(url);
+      }
+    }
+
+    for (final image in images) {
+      if (!newImages.contains(image)) {
+        try {
+          final ref = storage.refFromURL(image);
+          ref.delete();
+        } catch (e) {
+          debugPrint('Falha ao deletar: $image');
+        }
+      }
+    }
+
+    await firestoreRef.update({'images': updateImages});
+
+    images = updateImages;
+
+    loading = false;
+  }
+
   Product clone() {
     return Product(
-      id: id,
-      name: name,
-      description: description,
-      images: List.from(images),
-      sizes: sizes.map((size) => size.clone()).toList()
-    );
+        id: id,
+        name: name,
+        description: description,
+        images: List.from(images),
+        sizes: sizes.map((size) => size.clone()).toList());
+  }
+
+  @override
+  String toString() {
+    return 'Product{sizes: $sizes ,id: $id, name: $name, description: $description, images: $images, newImages: $newImages}';
   }
 }
