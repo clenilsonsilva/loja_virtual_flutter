@@ -3,6 +3,8 @@ import 'package:loja_virtual/models/home_manager.dart';
 import 'package:provider/provider.dart';
 
 import '../../common/Custom_drawer/custom_drawer.dart';
+import '../../models/user_manager.dart';
+import 'components/add_section_widget.dart';
 import 'components/section_list.dart';
 import 'components/section_stagerred.dart';
 
@@ -43,6 +45,35 @@ class HomeScreen extends StatelessWidget {
                     onPressed: () => Navigator.of(context).pushNamed('/cart'),
                     icon: const Icon(Icons.shopping_cart),
                     color: Colors.white,
+                  ),
+                  Consumer2<UserManager, HomeManager>(
+                    builder: (context, userManager, homeManager, child) {
+                      if (userManager.adminEnabled) {
+                        if (homeManager.editing) {
+                          return PopupMenuButton(onSelected: (e) {
+                            if (e == 'Salvar') {
+                              homeManager.saveEditing();
+                            } else {
+                              homeManager.discardEditing();
+                            }
+                          }, itemBuilder: (_) {
+                            return ['Salvar', 'Descartar'].map((e) {
+                              return PopupMenuItem(
+                                value: e,
+                                child: Text(e),
+                              );
+                            }).toList();
+                          });
+                        } else {
+                          return IconButton(
+                            onPressed: homeManager.enterEditing,
+                            icon: const Icon(Icons.edit),
+                          );
+                        }
+                      } else {
+                        return const SizedBox();
+                      }
+                    },
                   )
                 ],
               ),
@@ -61,6 +92,10 @@ class HomeScreen extends StatelessWidget {
                       }
                     },
                   ).toList();
+                  if (homeManager.editing) {
+                    children.add(const SizedBox(height: 20));
+                    children.add(AddSectionWidget(homeManager: homeManager));
+                  }
                   return SliverList(
                       delegate: SliverChildListDelegate(children));
                 },
