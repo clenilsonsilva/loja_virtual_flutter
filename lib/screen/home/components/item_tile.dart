@@ -12,19 +12,22 @@ class ItemTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-        onTap: () {
-          if (item.product != null) {
-            final product =
-                context.read<ProductManager>().findProductByID(item.product!);
-            if (product != null) {
-              Navigator.of(context).pushNamed('/product', arguments: product);
-            }
+      onTap: () {
+        if (item.product != null) {
+          final product =
+              context.read<ProductManager>().findProductByID(item.product!);
+          if (product != null) {
+            Navigator.of(context).pushNamed('/product', arguments: product);
           }
-        },
-        child: FadeInImage.memoryNetwork(
-          placeholder: kTransparentImage,
-          image: item.image,
-          fit: BoxFit.cover,
-        ));
+        }
+      },
+      child: item.image is String
+          ? FadeInImage.memoryNetwork(
+              placeholder: kTransparentImage,
+              image: item.image,
+              fit: BoxFit.cover,
+            )
+          : Image.file(item.image, fit: BoxFit.cover,),
+    );
   }
 }
