@@ -15,7 +15,7 @@ class AddTileWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final section = context.watch<Section>();
     void onImageSelected(File file) {
-      section.addItem(SectionItem(file, null));
+      section.addItem(SectionItem(file, ''));
       Navigator.of(context).pop();
     }
     return AspectRatio(
