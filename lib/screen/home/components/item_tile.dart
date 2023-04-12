@@ -62,6 +62,27 @@ class ItemTile extends StatelessWidget {
                           ),
                         ),
                       ),
+                      SizedBox(
+                        height: 30,
+                        width: product != null ? 80 : 50,
+                        child: GestureDetector(
+                          onTap: () async {
+                            if (product != null) {
+                              item.product = null;
+                            } else {
+                              final Product? product =
+                                  await Navigator.of(context)
+                                      .pushNamed('/select_product') as Product?;
+                              item.product = product?.id;
+                            }
+                            Navigator.of(context).pop();
+                          },
+                          child: Text(
+                            product != null ? 'Desvincular' : 'Vincular',
+                            style: const TextStyle(color: Colors.blue),
+                          ),
+                        ),
+                      ),
                     ],
                   );
                 },

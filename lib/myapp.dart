@@ -12,6 +12,7 @@ import 'screen/cart/cart_screen.dart';
 import 'screen/edit_product/edit_product_screen.dart';
 import 'screen/login/login_screen.dart';
 import 'screen/product/product_screen.dart';
+import 'screen/select_product/select_product_screen.dart';
 import 'screen/sign_up/signup_screen.dart';
 
 class MyApp extends StatelessWidget {
@@ -59,6 +60,8 @@ class MyApp extends StatelessWidget {
               return MaterialPageRoute(builder: (_) => SignUpScreen());
             case '/cart':
               return MaterialPageRoute(builder: (_) => const CartScreen());
+            case '/select_product':
+              return MaterialPageRoute(builder: (_) => const SelectProductScreen());
             case '/product':
               return MaterialPageRoute(
                   builder: (_) => ProductScreen(
