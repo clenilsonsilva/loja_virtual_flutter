@@ -27,6 +27,7 @@ class SectionStagerred extends StatelessWidget {
             Consumer<Section>(
               builder: (context, section, child) {
                 return MasonryGridView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
                     padding: EdgeInsets.zero,
                     shrinkWrap: true,
                     mainAxisSpacing: 20,

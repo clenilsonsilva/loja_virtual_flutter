@@ -6,37 +6,52 @@ import '../../../models/home_manager.dart';
 import '../../../models/section.dart';
 
 class SectionHeader extends StatelessWidget {
-  const SectionHeader({super.key,});
+  const SectionHeader({
+    super.key,
+  });
   @override
   Widget build(BuildContext context) {
     final homeManager = context.watch<HomeManager>();
     final section = context.watch<Section>();
     if (homeManager.editing) {
-      return Row(
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(
-            child: TextFormField(
-              initialValue: section.name,
-              decoration: const InputDecoration(
-                hintText: 'Titulo',
-                isDense: true,
-                border: InputBorder.none,
+          Row(
+            children: [
+              Expanded(
+                child: TextFormField(
+                  initialValue: section.name,
+                  decoration: const InputDecoration(
+                    hintText: 'Titulo',
+                    isDense: true,
+                    border: InputBorder.none,
+                  ),
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w800,
+                    fontSize: 18,
+                  ),
+                  onChanged: (text) => section.name = text,
+                ),
               ),
-              style: const TextStyle(
+              CustomIconButton(
+                iconData: Icons.remove,
                 color: Colors.white,
-                fontWeight: FontWeight.w800,
-                fontSize: 18,
-              ),
-              onChanged: (text) => section.name = text,
-            ),
+                ontap: () {
+                  homeManager.removeSection(section);
+                },
+              )
+            ],
           ),
-          CustomIconButton(
-            iconData: Icons.remove,
-            color: Colors.white,
-            ontap: () {
-              homeManager.removeSection(section);
-            },
-          )
+          if (section.error != null)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: Text(
+                section.error ?? '',
+                style: const TextStyle(color: Colors.red),
+              ),
+            ),
         ],
       );
     } else {

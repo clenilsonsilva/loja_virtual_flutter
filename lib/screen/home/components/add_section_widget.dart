@@ -10,39 +10,43 @@ class AddSectionWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return Column(
       children: [
-        Expanded(
-          child: GestureDetector(
-            onTap: () {
-              homeManager.addSection(Section(items: [], type: 'List'));
-            },
-            child: const SizedBox(
-              child: Center(
+        Row(
+          children: [
+            Expanded(
+              child: GestureDetector(
+                onTap: () {
+                  homeManager.addSection(Section(items: [], type: 'List'));
+                },
+                child: const SizedBox(
                   child: Text(
-                'Adicionar Lista',
-                style: TextStyle(
+                    'Adicionar Lista',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
                   color: Colors.white,
                   fontSize: 16,
+                    ),
+                  ),
                 ),
-              )),
+              ),
             ),
-          ),
-        ),
-        Expanded(
-          child: GestureDetector(
-            onTap: () {
-              homeManager.addSection(Section(items: [], type: 'Stagerred'));
-            },
-            child: const SizedBox(
-              child: Center(
+            Expanded(
+              child: GestureDetector(
+                onTap: () {
+                  homeManager.addSection(Section(items: [], type: 'Stagerred'));
+                },
+                child: const SizedBox(
                   child: Text('Adicionar Grade',
+                  textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 16,
-                      ))),
+                      )),
+                ),
+              ),
             ),
-          ),
+          ],
         ),
       ],
     );
