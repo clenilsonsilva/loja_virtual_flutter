@@ -7,6 +7,7 @@ import 'models/home_manager.dart';
 import 'models/product.dart';
 import 'models/product_manager.dart';
 import 'models/user_manager.dart';
+import 'screen/address/address_screen.dart';
 import 'screen/base/base_screen.dart';
 import 'screen/cart/cart_screen.dart';
 import 'screen/edit_product/edit_product_screen.dart';
@@ -44,7 +45,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProxyProvider<UserManager, AdminUsersManager>(
           create: (_) => AdminUsersManager(),
           lazy: false,
-          update: (context, userManager, adminUsersManager) => adminUsersManager!..updateUser(userManager),
+          update: (context, userManager, adminUsersManager) =>
+              adminUsersManager!..updateUser(userManager),
         ),
       ],
       //MATERIAL APP
@@ -60,15 +62,20 @@ class MyApp extends StatelessWidget {
               return MaterialPageRoute(builder: (_) => SignUpScreen());
             case '/cart':
               return MaterialPageRoute(builder: (_) => const CartScreen());
+            case '/address':
+              return MaterialPageRoute(builder: (_) => const AddressScreen());
             case '/select_product':
-              return MaterialPageRoute(builder: (_) => const SelectProductScreen());
+              return MaterialPageRoute(
+                  builder: (_) => const SelectProductScreen());
             case '/product':
               return MaterialPageRoute(
                   builder: (_) => ProductScreen(
                         product: settings.arguments as Product,
                       ));
             case '/edit_product':
-              return MaterialPageRoute(builder: (_) => EditProductScreen(settings.arguments as Product?));
+              return MaterialPageRoute(
+                  builder: (_) =>
+                      EditProductScreen(settings.arguments as Product?));
             case '/base':
             default:
               return MaterialPageRoute(builder: (_) => BaseScreen());
