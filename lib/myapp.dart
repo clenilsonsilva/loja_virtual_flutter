@@ -10,6 +10,7 @@ import 'models/user_manager.dart';
 import 'screen/address/address_screen.dart';
 import 'screen/base/base_screen.dart';
 import 'screen/cart/cart_screen.dart';
+import 'screen/checkout/checkout_screen.dart';
 import 'screen/edit_product/edit_product_screen.dart';
 import 'screen/login/login_screen.dart';
 import 'screen/product/product_screen.dart';
@@ -62,6 +63,8 @@ class MyApp extends StatelessWidget {
               return MaterialPageRoute(builder: (_) => SignUpScreen());
             case '/cart':
               return MaterialPageRoute(builder: (_) => const CartScreen());
+            case '/checkout':
+              return MaterialPageRoute(builder: (_) => const CheckoutScreen());
             case '/address':
               return MaterialPageRoute(builder: (_) => const AddressScreen());
             case '/select_product':
