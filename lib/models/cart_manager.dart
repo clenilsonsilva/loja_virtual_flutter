@@ -17,15 +17,26 @@ class CartManager extends ChangeNotifier {
 
   num productsPrice = 0.0;
   num? deliveryPrice;
+  num get totalPrice => productsPrice + (deliveryPrice ?? 0);
+
+  bool _loading = false;
+  bool get loading => _loading;
+  set loading(bool value) {
+    _loading = value;
+    notifyListeners();
+  }
 
   final firestore = FirebaseFirestore.instance;
 
   void updateUser(UserManager userManager) {
     user = userManager.usuario;
+    productsPrice = 0.0;
     items.clear();
+    removeAddress();
 
     if (user != null) {
       _loadCartItems();
+      _loadUserAddress();
     }
   }
 
@@ -35,6 +46,18 @@ class CartManager extends ChangeNotifier {
     items = cartSnap.docs
         .map((d) => CartProduct.fromDocument(d)..addListener(_onItemUpdated))
         .toList();
+  }
+
+  Future<void> _loadUserAddress() async {
+    if (user?.address != null) {
+      if (user!.address?.lat != null && user!.address?.long != null) {
+        if (await calculateDelivery(
+            user!.address!.lat!, user!.address!.long!)) {
+          address = user!.address;
+          notifyListeners();
+        }
+      }
+    }
   }
 
   void addToCart(Product product) {
@@ -92,40 +115,48 @@ class CartManager extends ChangeNotifier {
     return true;
   }
 
+  bool get isAdrressValid => address != null && deliveryPrice != null;
+
   //ADDRESS
 
   Future<void> getAddress(String cep) async {
+    loading = true;
     final cepAbertoService = CepAbertoService();
-
     try {
       final cepAbertoAddress = await cepAbertoService.getAddressFromCep(cep);
       if (cepAbertoAddress != null) {
         address = Address(
-            street: cepAbertoAddress.logradouro,
-            district: cepAbertoAddress.bairro,
-            zipCode: cepAbertoAddress.cep,
-            city: cepAbertoAddress.cidade.nome,
-            state: cepAbertoAddress.estado.sigla,
-            lat: cepAbertoAddress.latitude,
-            long: cepAbertoAddress.longitude);
-        notifyListeners();
+          street: cepAbertoAddress.logradouro,
+          district: cepAbertoAddress.bairro,
+          zipCode: cepAbertoAddress.cep,
+          city: cepAbertoAddress.cidade?.nome ?? '',
+          state: cepAbertoAddress.estado?.sigla ?? '',
+          lat: cepAbertoAddress.latitude,
+          long: cepAbertoAddress.longitude,
+        );
       }
+      loading = false;
     } catch (e) {
-      debugPrint(e.toString());
+      loading = false;
+      return Future.error('Cep Inválido');
     }
   }
 
   Future<void> setAddress(Address address) async {
+    loading = true;
     this.address = address;
-    if (await calculateDelivery(address.lat, address.long)) {
-      print('price: $deliveryPrice');
+    if (await calculateDelivery(address.lat!, address.long!)) {
+      user?.setAddress(address);
+      loading = false;
     } else {
+      loading = false;
       return Future.error('Endereço fora do raio de entrega');
     }
   }
 
   void removeAddress() {
     address = null;
+    deliveryPrice = null;
     notifyListeners();
   }
 

@@ -13,6 +13,7 @@ class AddressInputField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final primaryColor = Theme.of(context).primaryColor;
+    final cartManager = context.watch<CartManager>();
     String? emptyValidator(String? text) {
       if (text != null) {
         if (text.isEmpty) {
@@ -25,11 +26,12 @@ class AddressInputField extends StatelessWidget {
       }
     }
 
-    if (address.zipCode.isNotEmpty) {
+    if (address.zipCode!.isNotEmpty && cartManager.deliveryPrice == null) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           TextFormField(
+            enabled: !cartManager.loading,
             initialValue: address.street,
             decoration: const InputDecoration(
               isDense: true,
@@ -43,6 +45,7 @@ class AddressInputField extends StatelessWidget {
             children: [
               Expanded(
                 child: TextFormField(
+                  enabled: !cartManager.loading,
                   initialValue: address.number,
                   decoration: const InputDecoration(
                     isDense: true,
@@ -60,6 +63,7 @@ class AddressInputField extends StatelessWidget {
               const SizedBox(height: 16),
               Expanded(
                 child: TextFormField(
+                  enabled: !cartManager.loading,
                   initialValue: address.complement,
                   decoration: const InputDecoration(
                     isDense: true,
@@ -72,6 +76,7 @@ class AddressInputField extends StatelessWidget {
             ],
           ),
           TextFormField(
+            enabled: !cartManager.loading,
             initialValue: address.district,
             decoration: const InputDecoration(
               isDense: true,
@@ -130,31 +135,44 @@ class AddressInputField extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 8),
+          if (cartManager.loading)
+            LinearProgressIndicator(
+              valueColor: AlwaysStoppedAnimation(primaryColor),
+              backgroundColor: Colors.transparent,
+            ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
               backgroundColor: primaryColor,
               disabledBackgroundColor: primaryColor.withAlpha(100),
             ),
-            onPressed: () async {
-              if (Form.of(context).validate()) {
-                Form.of(context).save();
-                try {
-                  await context.read<CartManager>().setAddress(address);
-                } catch (e) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        e.toString(),
-                      ),
-                      backgroundColor: Colors.red,
-                    ),
-                  );
-                }
-              }
-            },
+            onPressed: !cartManager.loading
+                ? () async {
+                    if (Form.of(context).validate()) {
+                      Form.of(context).save();
+                      try {
+                        await context.read<CartManager>().setAddress(address);
+                      } catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              e.toString(),
+                            ),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                      }
+                    }
+                  }
+                : null,
             child: const Text('Calcular Frete'),
           ),
         ],
+      );
+    } else if (address.zipCode!.isNotEmpty) {
+      return Padding(
+        padding: const EdgeInsets.only(bottom: 8),
+        child: Text(
+            '${address.street}, ${address.number}\n${address.district}\n${address.city} - ${address.state}'),
       );
     } else {
       return const SizedBox();

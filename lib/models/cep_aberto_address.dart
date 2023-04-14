@@ -1,16 +1,16 @@
 class CepAbertoAddress {
-  final double altitude, latitude, longitude;
+  double altitude, latitude, longitude;
   final String cep, logradouro, bairro;
-  final Cidade cidade;
-  final Estado estado;
+  final Cidade? cidade;
+  final Estado? estado;
 
   CepAbertoAddress.fromMap(Map<String, dynamic> map)
-      : altitude = map['altitude'] as double,
-        cep = map['cep'] as String,
-        latitude = double.tryParse(map['latitude'] as String) ?? 0,
-        longitude = double.tryParse(map['longitude'] as String) ?? 0,
-        logradouro = map['logradouro'] as String,
-        bairro = map['bairro'] as String,
+      : altitude = map['altitude'] ?? 0.0,
+        cep = map['cep'] ?? '',
+        latitude = double.tryParse(map['latitude'] as String) ?? 0.0,
+        longitude = double.tryParse(map['longitude'] as String) ?? 0.0,
+        logradouro = map['logradouro'] ?? '',
+        bairro = map['bairro'] ?? '',
         cidade = Cidade.fromMap(map['cidade'] as Map<String, dynamic>),
         estado = Estado.fromMap(map['estado'] as Map<String, dynamic>);
 
@@ -21,11 +21,11 @@ class CepAbertoAddress {
 }
 
 class Cidade {
-  final String ibge, nome;
-  final int ddd;
+  final String? ibge, nome;
+  final int? ddd;
 
   Cidade.fromMap(Map<String, dynamic> map)
-      : ddd = map['ddd'] as int,
+      : ddd = map['ddd'],
         ibge = map['ibge'] as String,
         nome = map['nome'] as String;
 
@@ -36,7 +36,7 @@ class Cidade {
 }
 
 class Estado {
-  final String sigla;
+  final String? sigla;
   Estado.fromMap(Map<String, dynamic> map) : sigla = map['sigla'] as String;
 
   @override

@@ -33,7 +33,7 @@ class AddressCard extends StatelessWidget {
                     CepInputField(
                       adress: address,
                     ),
-                    AddressInputField(address: address)
+                    AddressInputField(address: address),
                   ],
                 ),
               );

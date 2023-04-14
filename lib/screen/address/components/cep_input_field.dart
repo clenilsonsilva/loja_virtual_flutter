@@ -7,21 +7,28 @@ import '../../../common/custom_iconbutton.dart';
 import '../../../models/address.dart';
 import '../../../models/cart_manager.dart';
 
-class CepInputField extends StatelessWidget {
-  CepInputField({super.key, required this.adress});
+class CepInputField extends StatefulWidget {
+  const CepInputField({super.key, required this.adress});
 
   final Address adress;
 
-  final cepController = TextEditingController();
+  @override
+  State<CepInputField> createState() => _CepInputFieldState();
+}
 
+class _CepInputFieldState extends State<CepInputField> {
+  final cepController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    final cartManager = context.watch<CartManager>();
     final primaryColor = Theme.of(context).primaryColor;
-    if (adress.zipCode.isEmpty) {
+
+    if (widget.adress.zipCode!.isEmpty) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           TextFormField(
+            enabled: !cartManager.loading,
             controller: cepController,
             decoration: const InputDecoration(
               isDense: true,
@@ -47,12 +54,32 @@ class CepInputField extends StatelessWidget {
               }
             },
           ),
+          if (cartManager.loading)
+            LinearProgressIndicator(
+              valueColor: AlwaysStoppedAnimation(primaryColor),
+              backgroundColor: Colors.transparent,
+            ),
           ElevatedButton(
-            onPressed: () {
-              if (Form.of(context).validate()) {
-                context.read<CartManager>().getAddress(cepController.text);
-              }
-            },
+            onPressed: !cartManager.loading
+                ? () async {
+                    if (Form.of(context).validate()) {
+                      try {
+                        await context
+                            .read<CartManager>()
+                            .getAddress(cepController.text);
+                      } catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              e.toString(),
+                            ),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                      }
+                    }
+                  }
+                : null,
             style: ElevatedButton.styleFrom(
               backgroundColor: primaryColor,
               disabledBackgroundColor: primaryColor.withAlpha(100),
@@ -68,7 +95,7 @@ class CepInputField extends StatelessWidget {
           children: [
             Expanded(
               child: Text(
-                'CEP: ${adress.zipCode}',
+                'CEP: ${widget.adress.zipCode}',
                 style: TextStyle(
                   color: primaryColor,
                   fontWeight: FontWeight.w600,
