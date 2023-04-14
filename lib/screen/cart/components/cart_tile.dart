@@ -21,7 +21,9 @@ class CartTile extends StatelessWidget {
               SizedBox(
                 height: 80,
                 width: 80,
-                child: Image.network(cartProduct.product!.images.first),
+                child: cartProduct.product?.images.first != null
+                    ? Image.network(cartProduct.product!.images.first)
+                    : null,
               ),
               Expanded(
                 child: Padding(
@@ -30,7 +32,7 @@ class CartTile extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        cartProduct.product!.name,
+                        cartProduct.product?.name ?? '',
                         style: const TextStyle(
                           fontWeight: FontWeight.w500,
                           fontSize: 17,
