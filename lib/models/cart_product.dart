@@ -5,11 +5,10 @@ import 'package:loja_virtual/models/item_size.dart';
 import 'product.dart';
 
 class CartProduct extends ChangeNotifier {
-  CartProduct.fromProduct(this.product) {
-    id = product != null ? product!.id : '';
-    productId = product != null ? product!.id : '';
+  CartProduct.fromProduct(this._product) {
+    productId = product!.id;
     quantity = 1;
-    size = product != null ? product!.selectedSize.name : '';
+    size = product!.selectedSize.name;
   }
 
   final firestore = FirebaseFirestore.instance;
@@ -22,21 +21,25 @@ class CartProduct extends ChangeNotifier {
     firestore.doc('products/$productId').get().then(
       (doc) {
         product = Product.fromDocument(doc);
-        notifyListeners();
       },
     );
   }
 
-  String id = '';
+  String? id;
   late String productId;
   late int quantity;
   late String size;
 
-  Product? product;
+  Product? _product;
+  Product? get product => _product;
+  set product(Product? value) {
+    _product = value;
+    notifyListeners();
+  }
 
   ItemSize? get itemSize {
     if (product != null) {
-      return product!.findSize(size);
+      return product?.findSize(size);
     } else {
       return null;
     }
@@ -44,7 +47,7 @@ class CartProduct extends ChangeNotifier {
 
   num get unitPrice {
     if (product != null) {
-      return itemSize!.price;
+      return itemSize?.price ?? 0;
     } else {
       return 0;
     }

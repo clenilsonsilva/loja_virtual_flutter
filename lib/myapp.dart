@@ -34,10 +34,11 @@ class MyApp extends StatelessWidget {
           lazy: false,
         ),
         ChangeNotifierProxyProvider<UserManager, CartManager>(
-          update: (context, userManger, cartManager) =>
-              cartManager!..updateUser(userManger),
           create: (_) => CartManager(),
           lazy: false,
+          update: (_, userManager, cartManager) =>
+              cartManager!..updateUser(userManager),
+          
         ),
         ChangeNotifierProvider(
           create: (_) => HomeManager(),
@@ -62,9 +63,10 @@ class MyApp extends StatelessWidget {
             case '/signup':
               return MaterialPageRoute(builder: (_) => SignUpScreen());
             case '/cart':
-              return MaterialPageRoute(builder: (_) => const CartScreen());
+              return MaterialPageRoute(
+                  builder: (_) =>  CartScreen(), settings: settings);
             case '/checkout':
-              return MaterialPageRoute(builder: (_) => const CheckoutScreen());
+              return MaterialPageRoute(builder: (_) => CheckoutScreen());
             case '/address':
               return MaterialPageRoute(builder: (_) => const AddressScreen());
             case '/select_product':

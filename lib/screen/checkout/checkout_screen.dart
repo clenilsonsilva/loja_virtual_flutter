@@ -6,28 +6,42 @@ import '../../models/cart_manager.dart';
 import '../../models/ckeckout_manager.dart';
 
 class CheckoutScreen extends StatelessWidget {
-  const CheckoutScreen({super.key});
+  CheckoutScreen({super.key});
+
+  final formKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProxyProvider<CartManager, CheckoutManager?>(
       create: (_) => CheckoutManager(),
       update: (_, cartManager, checkoutManager) =>
-          checkoutManager?..updateCart(cartManager),
+          checkoutManager!..updateCart(cartManager),
       lazy: false,
       child: Scaffold(
+        key: formKey,
         appBar: AppBar(
           title: const Text('Pagamento'),
           centerTitle: true,
           backgroundColor: Theme.of(context).primaryColor,
         ),
-        body: ListView(
-          children: [
-            PriceCard(
-              buttonText: 'Finalizar Pedido',
-              onPressed: () {},
-            ),
-          ],
+        body: Consumer<CheckoutManager>(
+          builder: (_, checkoutManager, child) {
+            return ListView(
+              children: [
+                PriceCard(
+                  buttonText: 'Finalizar Pedido',
+                  onPressed: () {
+                    checkoutManager.checkout(
+                      onStockFail: (e) {
+                        Navigator.of(context).popUntil(
+                            (route) => route.settings.name == '/cart');
+                      },
+                    );
+                  },
+                ),
+              ],
+            );
+          },
         ),
       ),
     );

@@ -121,7 +121,7 @@ class ProductScreen extends StatelessWidget {
                     ),
                     product.hasStock
                         ? Consumer2<UserManager, Product>(
-                            builder: (context, userManager, product, child) {
+                            builder: (_, userManager, product, __) {
                               return SizedBox(
                                 height: 44,
                                 child: ElevatedButton(

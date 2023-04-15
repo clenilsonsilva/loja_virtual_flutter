@@ -19,7 +19,7 @@ class CartScreen extends StatelessWidget {
         backgroundColor: Theme.of(context).primaryColor,
       ),
       body: Consumer<CartManager>(
-        builder: (context, cartManager, child) {
+        builder: (_, cartManager, __) {
           if (cartManager.user == null) {
             return const LoginCard();
           } else if (cartManager.items.isEmpty) {
@@ -27,25 +27,25 @@ class CartScreen extends StatelessWidget {
               iconData: Icons.remove_shopping_cart,
               title: 'Nenhum Produto no carrinho',
             );
-          } else {
-            return ListView(
-              children: [
-                Column(
-                    children: cartManager.items
-                        .map((cartProduct) => CartTile(
-                              cartProduct: cartProduct,
-                            ))
-                        .toList()),
-                PriceCard(
-                    buttonText: 'Continuar para Entrega',
-                    onPressed: cartManager.isCartValid
-                        ? () {
-                            Navigator.of(context).pushNamed('/address');
-                          }
-                        : null),
-              ],
-            );
           }
+          return ListView(
+            children: [
+              Column(
+                children: cartManager.items
+                    .map((cartProduct) => CartTile(
+                          cartProduct: cartProduct,
+                        ))
+                    .toList(),
+              ),
+              PriceCard(
+                  buttonText: 'Continuar para Entrega',
+                  onPressed: cartManager.isCartValid
+                      ? () {
+                          Navigator.of(context).pushNamed('/address');
+                        }
+                      : null),
+            ],
+          );
         },
       ),
     );

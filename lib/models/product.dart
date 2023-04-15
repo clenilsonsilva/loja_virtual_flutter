@@ -48,7 +48,6 @@ class Product extends ChangeNotifier {
     notifyListeners();
   }
 
-
   ItemSize _selectedSize =
       ItemSize.fromMap({'name': '', 'price': 0, 'stock': 0});
   ItemSize get selectedSize => _selectedSize;
@@ -73,7 +72,7 @@ class Product extends ChangeNotifier {
   ItemSize? findSize(String name) {
     try {
       return sizes.firstWhere((s) => s.name == name);
-    } on Exception {
+    } catch (e) {
       return null;
     }
   }

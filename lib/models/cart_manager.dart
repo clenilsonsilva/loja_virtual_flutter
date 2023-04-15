@@ -46,6 +46,7 @@ class CartManager extends ChangeNotifier {
     items = cartSnap.docs
         .map((d) => CartProduct.fromDocument(d)..addListener(_onItemUpdated))
         .toList();
+    
   }
 
   Future<void> _loadUserAddress() async {
@@ -92,25 +93,27 @@ class CartManager extends ChangeNotifier {
   }
 
   void _updateCartProduct(CartProduct cartProduct) {
-    if (cartProduct.id.isNotEmpty) {
+    if (cartProduct.id != null) {
       user!.cartReference
           .doc(cartProduct.id)
           .update(cartProduct.toCardItemMap());
     }
-    notifyListeners();
   }
 
   void removeOfCart(CartProduct cartProduct) {
     items.removeWhere((p) => p.id == cartProduct.id);
     user!.cartReference.doc(cartProduct.id).delete();
     cartProduct.removeListener(_onItemUpdated);
+    notifyListeners();
   }
 
   bool get isCartValid {
     for (final cartProduct in items) {
       if (!cartProduct.hasStock) {
+        print(cartProduct.size);
         return false;
       }
+      
     }
     return true;
   }
