@@ -38,7 +38,6 @@ class MyApp extends StatelessWidget {
           lazy: false,
           update: (_, userManager, cartManager) =>
               cartManager!..updateUser(userManager),
-          
         ),
         ChangeNotifierProvider(
           create: (_) => HomeManager(),
@@ -64,7 +63,7 @@ class MyApp extends StatelessWidget {
               return MaterialPageRoute(builder: (_) => SignUpScreen());
             case '/cart':
               return MaterialPageRoute(
-                  builder: (_) =>  CartScreen(), settings: settings);
+                  builder: (_) => CartScreen(), settings: settings);
             case '/checkout':
               return MaterialPageRoute(builder: (_) => CheckoutScreen());
             case '/address':
@@ -83,7 +82,8 @@ class MyApp extends StatelessWidget {
                       EditProductScreen(settings.arguments as Product?));
             case '/base':
             default:
-              return MaterialPageRoute(builder: (_) => BaseScreen());
+              return MaterialPageRoute(
+                  builder: (_) => BaseScreen(), settings: settings);
           }
         },
         theme: ThemeData(

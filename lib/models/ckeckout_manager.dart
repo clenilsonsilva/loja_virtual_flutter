@@ -2,10 +2,18 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import 'cart_manager.dart';
+import 'order.dart';
 import 'product.dart';
 
 class CheckoutManager extends ChangeNotifier {
   CartManager? cartManager;
+
+  bool _loading = false;
+  bool get loading => _loading;
+  set loading(bool value) {
+    _loading = value;
+    notifyListeners();
+  }
 
   final firestore = FirebaseFirestore.instance;
 
@@ -14,14 +22,28 @@ class CheckoutManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> checkout({required Function onStockFail}) async {
+  Future<void> checkout(
+      {required Function onStockFail, required Function onSucess}) async {
+    loading = true;
     try {
       await _decrementStock();
     } catch (e) {
       onStockFail(e);
-      debugPrint(e.toString());
+      loading = false;
+      return;
     }
-    _getOrderId().then((value) => print(value));
+    final orderId = await _getOrderId();
+
+    final order = Orderr.fromCartManager(cartManager!);
+    order.orderId = orderId.toString();
+
+    await order.save();
+
+    cartManager?.clear();
+
+    onSucess();
+
+    loading = false;
   }
 
   Future<int> _getOrderId() async {
@@ -52,9 +74,9 @@ class CheckoutManager extends ChangeNotifier {
         for (final cartProduct in cartManager!.items) {
           Product product;
 
-          if (productsToUpdate.any((p) => p.id == cartProduct.productId )) {
-            product =
-                productsToUpdate.firstWhere((p) => p.id == cartProduct.productId);
+          if (productsToUpdate.any((p) => p.id == cartProduct.productId)) {
+            product = productsToUpdate
+                .firstWhere((p) => p.id == cartProduct.productId);
           } else {
             final doc = await tx
                 .get(firestore.doc('products/${cartProduct.productId}'));
@@ -68,7 +90,7 @@ class CheckoutManager extends ChangeNotifier {
             productWithoutStock.add(product);
             //TODO
           } else {
-            // size.stock -= cartProduct.quantity;
+            size.stock -= cartProduct.quantity;
             productsToUpdate.add(product);
           }
         }
@@ -79,10 +101,6 @@ class CheckoutManager extends ChangeNotifier {
         }
 
         for (final product in productsToUpdate) {
-          for(final cartProduct in cartManager!.items) {
-            final size = product.findSize(cartProduct.size);
-            size?.stock -= cartProduct.quantity;
-          }
           tx.update(
             firestore.doc('products/${product.id}'),
             {'sizes': product.exportSizeList()},

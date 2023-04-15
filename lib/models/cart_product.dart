@@ -29,6 +29,7 @@ class CartProduct extends ChangeNotifier {
   late String productId;
   late int quantity;
   late String size;
+  num? fixedPrice;
 
   Product? _product;
   Product? get product => _product;
@@ -60,6 +61,15 @@ class CartProduct extends ChangeNotifier {
       'pid': productId,
       'quantity': quantity,
       'size': size,
+    };
+  }
+
+  Map<String, dynamic> toOrderItemMap() {
+    return {
+      'pid': productId,
+      'quantity': quantity,
+      'size': size,
+      'fixedPrice': fixedPrice ?? unitPrice,
     };
   }
 

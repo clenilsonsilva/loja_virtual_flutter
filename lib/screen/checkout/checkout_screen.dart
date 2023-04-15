@@ -26,21 +26,47 @@ class CheckoutScreen extends StatelessWidget {
         ),
         body: Consumer<CheckoutManager>(
           builder: (_, checkoutManager, child) {
-            return ListView(
-              children: [
-                PriceCard(
-                  buttonText: 'Finalizar Pedido',
-                  onPressed: () {
-                    checkoutManager.checkout(
-                      onStockFail: (e) {
-                        Navigator.of(context).popUntil(
-                            (route) => route.settings.name == '/cart');
-                      },
-                    );
-                  },
+            if (checkoutManager.loading) {
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation(Colors.white),
+                    ),
+                    SizedBox(height: 16),
+                    Text(
+                      'Processando o seu pagamento...',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w800,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            );
+              );
+            } else {
+              return ListView(
+                children: [
+                  PriceCard(
+                    buttonText: 'Finalizar Pedido',
+                    onPressed: () {
+                      checkoutManager.checkout(
+                        onStockFail: (e) {
+                          Navigator.of(context).popUntil(
+                              (route) => route.settings.name == '/cart');
+                        },
+                        onSucess: () {
+                          Navigator.of(context).popUntil(
+                              (route) => route.settings.name == '/base');
+                        }
+                      );
+                    },
+                  ),
+                ],
+              );
+            }
           },
         ),
       ),
