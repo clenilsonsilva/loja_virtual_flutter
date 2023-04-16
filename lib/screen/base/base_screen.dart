@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loja_virtual/screen/orders/orders_screen.dart';
 import 'package:provider/provider.dart';
 
 import '../../common/Custom_drawer/custom_drawer.dart';
@@ -30,13 +31,7 @@ class _BaseScreenState extends State<BaseScreen> {
             children: [
               const HomeScreen(),
               const ProductsScreen(),
-              Scaffold(
-                drawer: const CustomDrawer(),
-                appBar: AppBar(
-                  title: const Text('Home3'),
-                  backgroundColor: Theme.of(context).primaryColor,
-                ),
-              ),
+              const OrdersScreen(),
               Scaffold(
                 drawer: const CustomDrawer(),
                 appBar: AppBar(

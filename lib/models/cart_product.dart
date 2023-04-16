@@ -25,6 +25,18 @@ class CartProduct extends ChangeNotifier {
     );
   }
 
+  CartProduct.fromMap(Map<String, dynamic> map) {
+    productId = map['pid'];
+    quantity = map['quantity'];
+    size = map['size'];
+    fixedPrice = map['fixedPrice'];
+    firestore.doc('products/$productId').get().then(
+      (doc) {
+        product = Product.fromDocument(doc);
+      },
+    );
+  }
+
   String? id;
   late String productId;
   late int quantity;

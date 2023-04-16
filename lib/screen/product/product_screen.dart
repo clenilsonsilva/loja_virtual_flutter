@@ -25,7 +25,7 @@ class ProductScreen extends StatelessWidget {
             backgroundColor: primaryColor,
             actions: [
               Consumer<UserManager>(
-                builder: (context, userManager, child) {
+                builder: (_, userManager, __) {
                   if (userManager.adminEnabled) {
                     return IconButton(
                       onPressed: () {

@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:loja_virtual/screen/confirmation/confirmation_screen.dart';
 import 'package:provider/provider.dart';
 
 import 'models/admin_users_manager.dart';
 import 'models/cart_manager.dart';
 import 'models/home_manager.dart';
+import 'models/order.dart';
+import 'models/orders_manager.dart';
 import 'models/product.dart';
 import 'models/product_manager.dart';
 import 'models/user_manager.dart';
@@ -33,6 +36,11 @@ class MyApp extends StatelessWidget {
           create: (_) => ProductManager(),
           lazy: false,
         ),
+        ChangeNotifierProxyProvider<UserManager, OrdersManager>(
+            create: (_) => OrdersManager(),
+            lazy: false,
+            update: (_, userManager, ordersManager) =>
+                ordersManager!..updateUser(userManager.usuario)),
         ChangeNotifierProxyProvider<UserManager, CartManager>(
           create: (_) => CartManager(),
           lazy: false,
@@ -61,9 +69,11 @@ class MyApp extends StatelessWidget {
               return MaterialPageRoute(builder: (_) => LoginScreen());
             case '/signup':
               return MaterialPageRoute(builder: (_) => SignUpScreen());
+            case '/confirmation':
+              return MaterialPageRoute(builder: (_) => ConfirmationScreen(order: settings.arguments as Orderr));
             case '/cart':
               return MaterialPageRoute(
-                  builder: (_) => CartScreen(), settings: settings);
+                  builder: (_) => const CartScreen(), settings: settings);
             case '/checkout':
               return MaterialPageRoute(builder: (_) => CheckoutScreen());
             case '/address':
