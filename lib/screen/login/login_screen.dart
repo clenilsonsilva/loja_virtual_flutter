@@ -28,7 +28,7 @@ class LoginScreen extends StatelessWidget {
               child: const Text(
                 'CRIAR CONTA',
                 style: TextStyle(fontSize: 14, color: Colors.white),
-              ))
+              ),),
         ],
       ),
       body: Center(

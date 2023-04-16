@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../models/order.dart';
-import '../orders/components/order_product_tile.dart';
+import '../../common/order/order_product_tile.dart';
 
 class ConfirmationScreen extends StatelessWidget {
   const ConfirmationScreen({super.key, required this.order});

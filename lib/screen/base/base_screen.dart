@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:loja_virtual/screen/orders/orders_screen.dart';
 import 'package:provider/provider.dart';
 
 import '../../common/Custom_drawer/custom_drawer.dart';
 import '../../models/page_manager.dart';
 import '../../models/user_manager.dart';
+import '../admin_orders/admin_orders_screen.dart';
 import '../admin_users/admin_users_screen.dart';
 import '../home/home_screen.dart';
+import '../orders/orders_screen.dart';
 import '../products/products_screen.dart';
 
 class BaseScreen extends StatefulWidget {
-  BaseScreen({super.key});
+  const BaseScreen({super.key});
 
   @override
   State<BaseScreen> createState() => _BaseScreenState();
@@ -24,7 +25,7 @@ class _BaseScreenState extends State<BaseScreen> {
     return Provider(
       create: (context) => PageManager(pageController),
       child: Consumer<UserManager>(
-        builder: (context, userManager, child) {
+        builder: (_, userManager, __) {
           return PageView(
             controller: pageController,
             physics: const NeverScrollableScrollPhysics(),
@@ -41,13 +42,7 @@ class _BaseScreenState extends State<BaseScreen> {
               ),
               if (userManager.adminEnabled) ...[
                 AdminUsersScreen(),
-                Scaffold(
-                  drawer: const CustomDrawer(),
-                  appBar: AppBar(
-                    title: const Text('Pedidos'),
-                    backgroundColor: Theme.of(context).primaryColor,
-                  ),
-                ),
+                const AdminOrdersScrren(),
               ]
             ],
           );

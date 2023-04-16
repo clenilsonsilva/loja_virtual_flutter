@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:loja_virtual/helpers/validators.dart';
 import 'package:provider/provider.dart';
 
+import '../../helpers/validators.dart';
 import '../../models/user.dart';
 import '../../models/user_manager.dart';
 
@@ -10,6 +10,10 @@ class SignUpScreen extends StatelessWidget {
   final formKey = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final user = Userr();
+  final nameController = TextEditingController();
+  final emailController = TextEditingController();
+  final passController = TextEditingController();
+  final cpassController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -18,6 +22,7 @@ class SignUpScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Criar Conta'),
         centerTitle: true,
+        backgroundColor: Theme.of(context).primaryColor,
       ),
       body: Center(
         child: Card(
@@ -25,13 +30,14 @@ class SignUpScreen extends StatelessWidget {
           child: Form(
             key: formKey,
             child: Consumer<UserManager>(
-              builder: (context, value, child) {
+              builder: (_, userManager, __) {
                 return ListView(
                   padding: const EdgeInsets.all(16),
                   shrinkWrap: true,
                   children: [
                     TextFormField(
-                      enabled: !value.loading,
+                      controller: nameController,
+                      enabled: !userManager.loading,
                       decoration:
                           const InputDecoration(hintText: 'Nome completo'),
                       validator: (name) {
@@ -43,11 +49,11 @@ class SignUpScreen extends StatelessWidget {
                           return null;
                         }
                       },
-                      onSaved: (name) => user.name = name!,
                     ),
                     const SizedBox(height: 16),
                     TextFormField(
-                      enabled: !value.loading,
+                      controller: emailController,
+                      enabled: !userManager.loading,
                       decoration: const InputDecoration(hintText: 'E-mail'),
                       keyboardType: TextInputType.emailAddress,
                       validator: (email) {
@@ -59,11 +65,11 @@ class SignUpScreen extends StatelessWidget {
                           return null;
                         }
                       },
-                      onSaved: (email) => user.email = email!,
                     ),
                     const SizedBox(height: 16),
                     TextFormField(
-                      enabled: !value.loading,
+                      controller: passController,
+                      enabled: !userManager.loading,
                       decoration: const InputDecoration(hintText: 'Senha'),
                       obscureText: true,
                       validator: (pass) {
@@ -75,11 +81,11 @@ class SignUpScreen extends StatelessWidget {
                           return null;
                         }
                       },
-                      onSaved: (pass) => user.pass = pass!,
                     ),
                     const SizedBox(height: 16),
                     TextFormField(
-                      enabled: !value.loading,
+                      controller: cpassController,
+                      enabled: !userManager.loading,
                       decoration:
                           const InputDecoration(hintText: 'Repita a senha'),
                       obscureText: true,
@@ -92,8 +98,6 @@ class SignUpScreen extends StatelessWidget {
                           return null;
                         }
                       },
-                      onSaved: (confirmPassword) =>
-                          user.confirmPassword = confirmPassword!,
                     ),
                     const SizedBox(height: 16),
                     SizedBox(
@@ -102,13 +106,13 @@ class SignUpScreen extends StatelessWidget {
                         style: ElevatedButton.styleFrom(
                             disabledBackgroundColor: Colors.grey,
                             backgroundColor: Theme.of(context).primaryColor),
-                        onPressed: value.loading
+                        onPressed: userManager.loading
                             ? null
                             : () {
                                 if (formKey.currentState!.validate()) {
                                   formKey.currentState!.save();
 
-                                  if (user.pass != user.confirmPassword) {
+                                  if (passController.text != cpassController.text) {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
                                         content: Text('Senhas nao coincidem'),
@@ -116,24 +120,27 @@ class SignUpScreen extends StatelessWidget {
                                       ),
                                     );
                                     return;
+                                  } else {
+                                    userManager.singUp(
+                                      Userr(name: nameController.text, email: emailController.text, pass: passController.text, confirmPassword: cpassController.text),
+                                      (e) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                            content:
+                                                Text('Falha ao cadastrar: $e'),
+                                            backgroundColor: Colors.red,
+                                          ),
+                                        );
+                                      },
+                                      () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    );
                                   }
                                 }
-                                value.singUp(
-                                  user,
-                                  (e) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text('Falha ao cadastrar: $e'),
-                                        backgroundColor: Colors.red,
-                                      ),
-                                    );
-                                  },
-                                  () {
-                                    Navigator.of(context).pop();
-                                  },
-                                );
                               },
-                        child: value.loading
+                        child: userManager.loading
                             ? const CircularProgressIndicator(
                                 valueColor:
                                     AlwaysStoppedAnimation(Colors.white),

@@ -9,6 +9,7 @@ import 'user_manager.dart';
 class AdminUsersManager extends ChangeNotifier {
   List<Userr> users = [];
 
+
   final firestore = FirebaseFirestore.instance;
 
   StreamSubscription? _subscription;
@@ -33,6 +34,7 @@ class AdminUsersManager extends ChangeNotifier {
   }
 
   List<String> get names => users.map((e) => e.name).toList();
+
 
   @override
   void dispose() {

@@ -6,7 +6,6 @@ import 'package:loja_virtual/helpers/firebase_errors.dart';
 
 import 'user.dart';
 
-
 class UserManager extends ChangeNotifier {
   UserManager() {
     _loadCurrentUser();
@@ -18,8 +17,13 @@ class UserManager extends ChangeNotifier {
 
   final auth = FirebaseAuth.instance;
   final firestore = FirebaseFirestore.instance;
+
   bool _loading = false;
   bool get loading => _loading;
+  set loading(bool value) {
+    _loading = value;
+    notifyListeners();
+  }
 
   Future<void> signIn(Userr user, Function onFail, Function onSucess) async {
     loading = true;
@@ -29,7 +33,7 @@ class UserManager extends ChangeNotifier {
       await _loadCurrentUser(user: authResult.user);
       onSucess();
       notifyListeners();
-    } on FirebaseAuthException catch (e) {
+    } on PlatformException catch (e) {
       onFail(getErrorString(e.code));
     }
     loading = false;
@@ -41,19 +45,16 @@ class UserManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  set loading(bool value) {
-    _loading = value;
-    notifyListeners();
-  }
-
   Future<void> _loadCurrentUser({User? user}) async {
     final currentUser = user ?? auth.currentUser;
     if (currentUser != null) {
-      final DocumentSnapshot docUser = await firestore.collection('users').doc(currentUser.uid).get();
+      final DocumentSnapshot docUser =
+          await firestore.collection('users').doc(currentUser.uid).get();
       usuario = Userr.fromDocument(docUser);
 
-      final docAdmin = await firestore.collection('admins').doc(usuario!.id).get();
-      if(docAdmin.exists) {
+      final docAdmin =
+          await firestore.collection('admins').doc(usuario!.id).get();
+      if (docAdmin.exists) {
         usuario!.admin = true;
       }
       print(usuario!.admin);
@@ -75,9 +76,9 @@ class UserManager extends ChangeNotifier {
 
       onSucess();
       notifyListeners();
-
     } on PlatformException catch (e) {
       onFail(getErrorString(e.code));
+      
     }
     loading = false;
   }

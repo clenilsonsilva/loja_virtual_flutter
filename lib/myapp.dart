@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:loja_virtual/screen/confirmation/confirmation_screen.dart';
+import 'package:loja_virtual/models/admin_orders_manager.dart';
 import 'package:provider/provider.dart';
 
 import 'models/admin_users_manager.dart';
@@ -14,6 +14,7 @@ import 'screen/address/address_screen.dart';
 import 'screen/base/base_screen.dart';
 import 'screen/cart/cart_screen.dart';
 import 'screen/checkout/checkout_screen.dart';
+import 'screen/confirmation/confirmation_screen.dart';
 import 'screen/edit_product/edit_product_screen.dart';
 import 'screen/login/login_screen.dart';
 import 'screen/product/product_screen.dart';
@@ -54,8 +55,14 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProxyProvider<UserManager, AdminUsersManager>(
           create: (_) => AdminUsersManager(),
           lazy: false,
-          update: (context, userManager, adminUsersManager) =>
+          update: (_, userManager, adminUsersManager) =>
               adminUsersManager!..updateUser(userManager),
+        ),
+        ChangeNotifierProxyProvider<UserManager, AdminOrdersManager>(
+          create: (_) => AdminOrdersManager(),
+          lazy: false,
+          update: (_, userManager, adminOrdersManager) =>
+              adminOrdersManager!..updateAdmin(userManager.adminEnabled),
         ),
       ],
       //MATERIAL APP

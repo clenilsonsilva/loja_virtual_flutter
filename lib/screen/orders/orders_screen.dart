@@ -5,7 +5,7 @@ import 'package:loja_virtual/common/login_card.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/orders_manager.dart';
-import 'components/order_tile.dart';
+import '../../common/order/order_tile.dart';
 
 class OrdersScreen extends StatelessWidget {
   const OrdersScreen({super.key});
