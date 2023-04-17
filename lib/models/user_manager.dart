@@ -58,7 +58,6 @@ class UserManager extends ChangeNotifier {
       if (docAdmin.exists) {
         usuario!.admin = true;
       }
-      print(usuario!.admin);
       notifyListeners();
     }
   }

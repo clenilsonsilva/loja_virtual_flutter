@@ -10,7 +10,8 @@ class Address {
     this.lat = 0,
     this.long = 0,
   });
-  String? street, number, complement, district, zipCode, city, state;
+  String? street, number, district, zipCode, city, state;
+  String complement = '';
   double? lat, long;
 
   Address.fromMap(Map<String, dynamic> map) {

@@ -3,6 +3,8 @@ import 'package:loja_virtual/common/Custom_drawer/custom_drawer.dart';
 import 'package:loja_virtual/models/stores_manager.dart';
 import 'package:provider/provider.dart';
 
+import 'components/store_card.dart';
+
 class StoresScreen extends StatelessWidget {
   const StoresScreen({super.key});
 
@@ -17,7 +19,20 @@ class StoresScreen extends StatelessWidget {
       ),
       body: Consumer<StoresManager>(
         builder: (_, storesManager, __) {
-          return Container();
+          if (storesManager.stores.isEmpty) {
+            return const LinearProgressIndicator(
+              valueColor: AlwaysStoppedAnimation(Colors.white),
+              backgroundColor: Colors.transparent,
+            );
+          }
+          else{
+            return ListView.builder(
+              itemCount: storesManager.stores.length,
+              itemBuilder: (_, index) {
+                return StoreCard(store: storesManager.stores[index]);
+              },
+            );
+          }
         },
       ),
     );
