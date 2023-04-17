@@ -39,6 +39,7 @@ class UserManager extends ChangeNotifier {
     loading = false;
   }
 
+
   void signOut() {
     auth.signOut();
     usuario = null;

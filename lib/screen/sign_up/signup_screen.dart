@@ -100,56 +100,54 @@ class SignUpScreen extends StatelessWidget {
                       },
                     ),
                     const SizedBox(height: 16),
-                    SizedBox(
-                      height: 44,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            disabledBackgroundColor: Colors.grey,
-                            backgroundColor: Theme.of(context).primaryColor),
-                        onPressed: userManager.loading
-                            ? null
-                            : () {
-                                if (formKey.currentState!.validate()) {
-                                  formKey.currentState!.save();
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                          disabledBackgroundColor: Colors.grey,
+                          backgroundColor: Theme.of(context).primaryColor),
+                      onPressed: userManager.loading
+                          ? null
+                          : () {
+                              if (formKey.currentState!.validate()) {
+                                formKey.currentState!.save();
 
-                                  if (passController.text != cpassController.text) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content: Text('Senhas nao coincidem'),
-                                        backgroundColor: Colors.red,
-                                      ),
-                                    );
-                                    return;
-                                  } else {
-                                    userManager.singUp(
-                                      Userr(name: nameController.text, email: emailController.text, pass: passController.text, confirmPassword: cpassController.text),
-                                      (e) {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          SnackBar(
-                                            content:
-                                                Text('Falha ao cadastrar: $e'),
-                                            backgroundColor: Colors.red,
-                                          ),
-                                        );
-                                      },
-                                      () {
-                                        Navigator.of(context).pop();
-                                      },
-                                    );
-                                  }
+                                if (passController.text != cpassController.text) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text('Senhas nao coincidem'),
+                                      backgroundColor: Colors.red,
+                                    ),
+                                  );
+                                  return;
+                                } else {
+                                  userManager.singUp(
+                                    Userr(name: nameController.text, email: emailController.text, pass: passController.text, confirmPassword: cpassController.text),
+                                    (e) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          content:
+                                              Text('Falha ao cadastrar: $e'),
+                                          backgroundColor: Colors.red,
+                                        ),
+                                      );
+                                    },
+                                    () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  );
                                 }
-                              },
-                        child: userManager.loading
-                            ? const CircularProgressIndicator(
-                                valueColor:
-                                    AlwaysStoppedAnimation(Colors.white),
-                              )
-                            : const Text(
-                                'Criar Conta',
-                                style: TextStyle(fontSize: 18),
-                              ),
-                      ),
+                              }
+                            },
+                      child: userManager.loading
+                          ? const CircularProgressIndicator(
+                              valueColor:
+                                  AlwaysStoppedAnimation(Colors.white),
+                            )
+                          : const Text(
+                              'Criar Conta',
+                              style: TextStyle(fontSize: 15),
+                            ),
                     )
                   ],
                 );

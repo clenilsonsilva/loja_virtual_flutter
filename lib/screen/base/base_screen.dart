@@ -10,6 +10,7 @@ import '../admin_users/admin_users_screen.dart';
 import '../home/home_screen.dart';
 import '../orders/orders_screen.dart';
 import '../products/products_screen.dart';
+import '../stores/stores_screen.dart';
 
 class BaseScreen extends StatefulWidget {
   const BaseScreen({super.key});
@@ -40,13 +41,7 @@ class _BaseScreenState extends State<BaseScreen> {
               const HomeScreen(),
               const ProductsScreen(),
               const OrdersScreen(),
-              Scaffold(
-                drawer: const CustomDrawer(),
-                appBar: AppBar(
-                  title: const Text('Home4'),
-                  backgroundColor: Theme.of(context).primaryColor,
-                ),
-              ),
+              StoresScreen(),
               if (userManager.adminEnabled) ...[
                 AdminUsersScreen(),
                 AdminOrdersScrren(),

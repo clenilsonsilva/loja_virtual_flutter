@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:loja_virtual/models/admin_orders_manager.dart';
 import 'package:provider/provider.dart';
 
+import 'models/admin_orders_manager.dart';
 import 'models/admin_users_manager.dart';
 import 'models/cart_manager.dart';
 import 'models/home_manager.dart';
@@ -9,6 +9,7 @@ import 'models/order.dart';
 import 'models/orders_manager.dart';
 import 'models/product.dart';
 import 'models/product_manager.dart';
+import 'models/stores_manager.dart';
 import 'models/user_manager.dart';
 import 'screen/address/address_screen.dart';
 import 'screen/base/base_screen.dart';
@@ -51,6 +52,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => HomeManager(),
           lazy: false,
+        ),
+        ChangeNotifierProvider(
+          create: (_) => StoresManager(),
         ),
         ChangeNotifierProxyProvider<UserManager, AdminUsersManager>(
           create: (_) => AdminUsersManager(),
