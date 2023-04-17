@@ -13,6 +13,7 @@ class ProductsListTile extends StatelessWidget {
         Navigator.of(context).pushNamed('/product', arguments: product);
       },
       child: Card(
+        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(4),
         ),
@@ -28,7 +29,7 @@ class ProductsListTile extends StatelessWidget {
               const SizedBox(width: 16),
               Expanded(
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
@@ -53,6 +54,17 @@ class ProductsListTile extends StatelessWidget {
                       color: Theme.of(context).primaryColor,
                     ),
                   ),
+                  if (!product.hasStock)
+                    const Padding(
+                      padding: EdgeInsets.only(top: 4),
+                      child: Text(
+                        'Sem Estoque',
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontSize: 10,
+                        ),
+                      ),
+                    ),
                 ],
               ))
             ],

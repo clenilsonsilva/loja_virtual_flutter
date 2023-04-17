@@ -11,6 +11,7 @@ class Product extends ChangeNotifier {
     name = doc['name'];
     description = doc['description'];
     images = List.from(doc['images']);
+    deleted = doc['deleted'] ?? false;
     try {
       sizes = (doc['sizes'] as List<dynamic>)
           .map((s) => ItemSize.fromMap(s as Map<String, dynamic>))
@@ -24,6 +25,7 @@ class Product extends ChangeNotifier {
     this.name = '',
     this.id = '',
     this.description = '',
+    this.deleted = false,
     required this.images,
     required this.sizes,
   });
@@ -40,6 +42,8 @@ class Product extends ChangeNotifier {
   late List<String> images;
   late List<ItemSize> sizes;
   late List<dynamic> newImages;
+
+  bool? deleted;
 
   bool _loading = false;
   bool get loading => _loading;
@@ -66,7 +70,7 @@ class Product extends ChangeNotifier {
   }
 
   bool get hasStock {
-    return totalStock > 0;
+    return totalStock > 0 && !deleted!;
   }
 
   ItemSize? findSize(String name) {
@@ -78,13 +82,29 @@ class Product extends ChangeNotifier {
   }
 
   num get basePrice {
-    num lowest = double.infinity;
-    for (final size in sizes) {
-      if (size.price < lowest && size.hasStock) {
-        lowest = size.price;
+    num lowest0 = double.infinity;
+    num lowest1 = double.infinity;
+    num lowest2 = double.infinity;
+    int counter = 0;
+    for (int i = 0; i < sizes.length; i++) {
+      if (i == 0) {
+        counter = 0;
+      }
+      if (sizes[i].price < lowest0 && sizes[i].hasStock) {
+        counter++;
+        lowest0 = sizes[i].price;
+      }
+      if (sizes[i].price < lowest1 && !sizes[i].hasStock) {
+        lowest1 = sizes[i].price;
+      }
+      if (i == sizes.length - 1 && counter == 0) {
+        lowest2 = lowest1;
+      }
+      if (i == sizes.length - 1 && counter > 0) {
+        lowest2 = lowest0;
       }
     }
-    return lowest;
+    return lowest2;
   }
 
   List<Map<String, dynamic>> exportSizeList() {
@@ -97,6 +117,7 @@ class Product extends ChangeNotifier {
       'name': name,
       'description': description,
       'sizes': exportSizeList(),
+      'deleted': deleted,
     };
 
     if (id.isEmpty) {
@@ -137,13 +158,19 @@ class Product extends ChangeNotifier {
     loading = false;
   }
 
+  void delete() {
+    firestoreRef.update({'deleted': true});
+  }
+
   Product clone() {
     return Product(
-        id: id,
-        name: name,
-        description: description,
-        images: List.from(images),
-        sizes: sizes.map((size) => size.clone()).toList());
+      id: id,
+      name: name,
+      description: description,
+      images: List.from(images),
+      deleted: deleted,
+      sizes: sizes.map((size) => size.clone()).toList(),
+    );
   }
 
   @override

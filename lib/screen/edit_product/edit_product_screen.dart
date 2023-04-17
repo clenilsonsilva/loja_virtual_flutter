@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:loja_virtual/models/product_manager.dart';
+import 'package:loja_virtual/screen/edit_product/components/delete_order_dialog.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/product.dart';
@@ -24,6 +25,17 @@ class EditProductScreen extends StatelessWidget {
           title: Text(editing ? 'Editar Anúncio' : 'Criar Anúncio'),
           centerTitle: true,
           backgroundColor: Theme.of(context).primaryColor,
+          actions: [
+            if (editing)
+              IconButton(
+                onPressed: () {
+                  showDialog(
+                      context: context,
+                      builder: (_) => DeleteOrderDialgog(product: product));
+                },
+                icon: const Icon(Icons.delete),
+              ),
+          ],
         ),
         backgroundColor: Colors.white,
         body: Form(
@@ -125,11 +137,12 @@ class EditProductScreen extends StatelessWidget {
                                       if (formKey.currentState!.validate()) {
                                         formKey.currentState!.save();
                                         await product.save();
-                                        context.read<ProductManager>().update(product);
+                                        context
+                                            .read<ProductManager>()
+                                            .update(product);
                                         Navigator.of(context).pop();
                                       }
                                     }
-                                    
                                   }
                                 : null,
                             child: product.loading

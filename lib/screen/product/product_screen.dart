@@ -26,15 +26,16 @@ class ProductScreen extends StatelessWidget {
             actions: [
               Consumer<UserManager>(
                 builder: (_, userManager, __) {
-                  if (userManager.adminEnabled) {
+                  if (userManager.adminEnabled && product.deleted == false) {
                     return IconButton(
                       onPressed: () {
-                        Navigator.of(context).pushReplacementNamed('/edit_product', arguments: product);
+                        Navigator.of(context).pushReplacementNamed(
+                            '/edit_product',
+                            arguments: product);
                       },
                       icon: const Icon(Icons.edit),
                     );
-                  }
-                  else{
+                  } else {
                     return const SizedBox();
                   }
                 },
@@ -100,22 +101,32 @@ class ProductScreen extends StatelessWidget {
                         fontSize: 16,
                       ),
                     ),
-                    const Padding(
-                      padding: EdgeInsets.only(top: 8, bottom: 8),
-                      child: Text(
-                        'Tamanhos',
-                        style: TextStyle(
-                          fontSize: 16,
+                    if (product.deleted == true)
+                      const Padding(
+                        padding: EdgeInsets.only(top: 16, bottom: 8),
+                        child: Text(
+                          'Indisponivel',
+                          style: TextStyle(fontSize: 16, color: Colors.red),
+                        ),
+                      )
+                    else ...[
+                      const Padding(
+                        padding: EdgeInsets.only(top: 16, bottom: 8),
+                        child: Text(
+                          'Tamanhos',
+                          style: TextStyle(
+                            fontSize: 16,
+                          ),
                         ),
                       ),
-                    ),
-                    Wrap(
-                      spacing: 8,
-                      runSpacing: 8,
-                      children: product.sizes.map((s) {
-                        return SizeWidget(size: s);
-                      }).toList(),
-                    ),
+                      Wrap(
+                        spacing: 8,
+                        runSpacing: 8,
+                        children: product.sizes.map((s) {
+                          return SizeWidget(size: s);
+                        }).toList(),
+                      ),
+                    ],
                     const SizedBox(
                       height: 20,
                     ),
