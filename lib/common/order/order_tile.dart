@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../models/order.dart';
+import 'cancel_order_dialog.dart';
+import 'export_address_dialog.dart';
 import 'order_product_tile.dart';
 
 class OrderTile extends StatelessWidget {
@@ -67,8 +69,12 @@ class OrderTile extends StatelessWidget {
                 children: [
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white, elevation: 0),
-                    onPressed: order.cancel,
+                        backgroundColor: Colors.transparent, elevation: 0),
+                    onPressed: () {
+                      showDialog(
+                          context: context,
+                          builder: (_) => CancelOrderDialog(order: order));
+                    },
                     child: const Text(
                       'Cancelar',
                       style: TextStyle(
@@ -79,7 +85,9 @@ class OrderTile extends StatelessWidget {
                   const SizedBox(width: 10),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white, elevation: 0),
+                        backgroundColor: Colors.transparent,
+                        elevation: 0,
+                        disabledBackgroundColor: Colors.transparent),
                     onPressed: order.back,
                     child: const Text(
                       'Recuar',
@@ -89,7 +97,9 @@ class OrderTile extends StatelessWidget {
                   const SizedBox(width: 10),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white, elevation: 0),
+                        backgroundColor: Colors.transparent,
+                        elevation: 0,
+                        disabledBackgroundColor: Colors.transparent),
                     onPressed: order.advance,
                     child: const Text(
                       'Avançar',
@@ -99,8 +109,14 @@ class OrderTile extends StatelessWidget {
                   const SizedBox(width: 10),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white, elevation: 0),
-                    onPressed: () {},
+                        backgroundColor: Colors.transparent,
+                        elevation: 0,
+                        disabledBackgroundColor: Colors.transparent),
+                    onPressed: () {
+                      showDialog(
+                          context: context,
+                          builder: (_) => ExportAddressDialog(address: order.address));
+                    },
                     child: Text(
                       'Endereço',
                       style: TextStyle(
