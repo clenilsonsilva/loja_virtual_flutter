@@ -28,6 +28,7 @@ dependencies:
   sliding_up_panel: ^2.0.0+1
   screenshot: ^1.3.0
   image_gallery_saver: '^1.7.1'
+  url_launcher: ^6.1.10
 
 dev_dependencies:
   flutter_test:
