@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:loja_virtual/common/custom_iconbutton.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../../../models/store.dart';
+import 'package:map_launcher/map_launcher.dart';
 
 class StoreCard extends StatelessWidget {
   const StoreCard({super.key, required this.store});
@@ -24,6 +25,62 @@ class StoreCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    void showError() {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('Este dispositivo nao possui esta funcao!!!'),
+        backgroundColor: Colors.red,
+      ));
+    }
+
+    Future<void> openPhone() async {
+      final launchUri = Uri(scheme: 'tel', path: store.cleanPhone);
+      if (await canLaunchUrl(launchUri)) {
+        await launchUrl(launchUri);
+      } else {
+        showError();
+      }
+    }
+
+    Future<void> openMap() async {
+      try {
+        final availableMaps = await MapLauncher.installedMaps;
+
+        // ignore: use_build_context_synchronously
+        showModalBottomSheet(
+            context: context,
+            builder: (_) {
+              return SafeArea(
+                  child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  for (final map in availableMaps)
+                    ListTile(
+                      onTap: () {
+                        map.showMarker(
+                          coords: Coords(
+                            store.address!.lat!,
+                            store.address!.long!,
+                          ),
+                          title: store.name ?? '',
+                          description: store.addressText,
+                        );
+                        Navigator.of(context).pop();
+                      },
+                      title: Text(map.mapName),
+                      leading: SvgPicture.asset(
+                        map.icon,
+                        height: 30.0,
+                        width: 30.0,
+                      ),
+                    ),
+                ],
+              ));
+            });
+      } catch (e) {
+        showError();
+      }
+    }
+
     final pc = Theme.of(context).primaryColor;
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -100,7 +157,7 @@ class StoreCard extends StatelessWidget {
                     CustomIconButton(
                       iconData: Icons.map,
                       color: pc,
-                      ontap: () {},
+                      ontap: openMap,
                     ),
                     CustomIconButton(
                       iconData: Icons.phone,
@@ -115,12 +172,5 @@ class StoreCard extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  Future<void> openPhone() async {
-    final launchUri = Uri(scheme: 'tel', path: store.cleanPhone);
-    if (await canLaunchUrl(launchUri)) {
-      await launchUrl(launchUri);
-    }
   }
 }
