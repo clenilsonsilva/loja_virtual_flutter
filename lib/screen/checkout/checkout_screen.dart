@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:loja_virtual/common/price_card.dart';
-import 'package:loja_virtual/models/page_manager.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/cart_manager.dart';
 import '../../models/ckeckout_manager.dart';
+import 'components/credit_card_widget.dart';
 
 class CheckoutScreen extends StatelessWidget {
   CheckoutScreen({super.key});
@@ -50,6 +50,7 @@ class CheckoutScreen extends StatelessWidget {
             } else {
               return ListView(
                 children: [
+                  CreditCardWidget(),
                   PriceCard(
                     buttonText: 'Finalizar Pedido',
                     onPressed: () {

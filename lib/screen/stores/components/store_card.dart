@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:loja_virtual/common/custom_iconbutton.dart';
+import 'package:map_launcher/map_launcher.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../models/store.dart';
-import 'package:map_launcher/map_launcher.dart';
 
 class StoreCard extends StatelessWidget {
   const StoreCard({super.key, required this.store});
