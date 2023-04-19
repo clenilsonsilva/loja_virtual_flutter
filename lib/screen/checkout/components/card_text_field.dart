@@ -4,24 +4,28 @@ import 'package:flutter/services.dart';
 class CardTextField extends StatelessWidget {
   const CardTextField({
     super.key,
-    required this.title,
+    this.title = '',
     this.bold = false,
-    required this.hint,
-    required this.textInputType,
+    this.hint = '',
+    this.textInputType = TextInputType.text,
     this.inputFormatters = const [],
-    required this.validator,
+    this.validator,
+    this.maxLength = 0,
+    this.textAlign = TextAlign.start,
   });
 
   final String title, hint;
   final bool bold;
   final TextInputType textInputType;
   final List<TextInputFormatter> inputFormatters;
-  final FormFieldValidator validator;
+  final FormFieldValidator? validator;
+  final int maxLength;
+  final TextAlign textAlign;
 
   @override
   Widget build(BuildContext context) {
     return FormField<String>(
-      initialValue: '',
+        initialValue: '',
         validator: validator,
         builder: (state) {
           return Padding(
@@ -29,45 +33,55 @@ class CardTextField extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  children: [
-                    Text(
-                      title,
-                      style: const TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.white,
-                      ),
-                    ),
-                    if(state.hasError)
-                      const Text(
-                        '   Inválido',
-                        style: TextStyle(
-                          color: Colors.red,
-                          fontSize: 10,
+                if (title.isNotEmpty)
+                  Row(
+                    children: [
+                      Text(
+                        title,
+                        style: const TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.white,
                         ),
                       ),
-                  ],
-                ),
+                      if (state.hasError)
+                        const Text(
+                          '   Inválido',
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontSize: 10,
+                          ),
+                        ),
+                    ],
+                  ),
                 TextFormField(
                   style: TextStyle(
-                      color: Colors.white,
+                      color: title.isEmpty && state.hasError
+                          ? Colors.red
+                          : Colors.white,
                       fontWeight: bold ? FontWeight.bold : FontWeight.w500,
                       fontSize: 18),
                   decoration: InputDecoration(
-                      hintText: hint,
-                      hintStyle: TextStyle(
-                        color: Colors.white.withAlpha(100),
-                      ),
-                      border: InputBorder.none,
-                      isDense: true,
-                      contentPadding: const EdgeInsets.symmetric(vertical: 2)),
+                    hintText: hint,
+                    hintStyle: TextStyle(
+                      color: title.isEmpty && state.hasError
+                          ? Colors.red
+                          : Colors.white.withAlpha(100),
+                    ),
+                    border: InputBorder.none,
+                    isDense: true,
+                    contentPadding: const EdgeInsets.symmetric(vertical: 2),
+                    counterText: '',
+                  ),
                   keyboardType: textInputType,
                   inputFormatters: inputFormatters,
                   onChanged: (text) {
                     state.didChange(text);
                   },
-                )
+                  maxLength: maxLength == 0 ? null : maxLength,
+                  textAlign: textAlign,
+                  cursorColor: Colors.white,
+                ),
               ],
             ),
           );

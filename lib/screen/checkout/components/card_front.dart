@@ -28,58 +28,57 @@ class CardFront extends StatelessWidget {
         child: Row(
           children: [
             Expanded(
-                child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                CardTextField(
-                  bold: true,
-                  title: 'Número',
-                  hint: '0000 0000 0000 0000',
-                  textInputType: TextInputType.number,
-                  inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly,
-                    CartaoBancarioInputFormatter(),
-                  ],
-                  validator: (numero) {
-                    if(numero.length!= 19) {
-                      return 'Inválido';
-                    }
-                    else{
-                      return null;
-                    }
-                  },
-                ),
-                CardTextField(
-                  title: 'Validade',
-                  hint: '00/0000',
-                  textInputType: TextInputType.number,
-                  inputFormatters: [
-                    dateFormatter,
-                  ],
-                  validator: (validade) {
-                    if(validade.length != 7) {
-                      return 'Inválido';
-                    }
-                    else {
-                      return null;
-                    }
-                  },
-                ),
-                CardTextField(
-                  bold: true,
-                  title: 'Titular',
-                  hint: 'Clenilson da Silva',
-                  textInputType: TextInputType.text,
-                  validator: (name) {
-                    if (name.isEmpty) {
-                      return 'Inválido';
-                    } else {
-                      return null;
-                    }
-                  },
-                ),
-              ],
-            ))
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  CardTextField(
+                    bold: true,
+                    title: 'Número',
+                    hint: '0000 0000 0000 0000',
+                    textInputType: TextInputType.number,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      CartaoBancarioInputFormatter(),
+                    ],
+                    validator: (numero) {
+                      if (numero.length != 19) {
+                        return 'Inválido';
+                      } else {
+                        return null;
+                      }
+                    },
+                  ),
+                  CardTextField(
+                    title: 'Validade',
+                    hint: '00/0000',
+                    textInputType: TextInputType.number,
+                    inputFormatters: [
+                      dateFormatter,
+                    ],
+                    validator: (validade) {
+                      if (validade.length != 7) {
+                        return 'Inválido';
+                      } else {
+                        return null;
+                      }
+                    },
+                  ),
+                  CardTextField(
+                    bold: true,
+                    title: 'Titular',
+                    hint: 'Clenilson da Silva',
+                    textInputType: TextInputType.text,
+                    validator: (name) {
+                      if (name.isEmpty) {
+                        return 'Inválido';
+                      } else {
+                        return null;
+                      }
+                    },
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
