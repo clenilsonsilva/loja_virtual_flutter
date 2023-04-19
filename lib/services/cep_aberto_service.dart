@@ -17,7 +17,6 @@ class CepAbertoService {
 
     try {
       final response = await dio.get<Map<String, dynamic>>(endPoint);
-      print(response.data);
 
       if (response.data != null) {
         if (response.data!.isEmpty) {
@@ -25,7 +24,6 @@ class CepAbertoService {
         }
       }
       if (response.data != null) {
-        print(CepAbertoAddress.fromMap(response.data!).cep);
         final address = CepAbertoAddress.fromMap(response.data!);
         return address;
       } else {

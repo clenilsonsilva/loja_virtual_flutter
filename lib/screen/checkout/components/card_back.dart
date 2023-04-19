@@ -12,6 +12,11 @@ class CardBack extends StatelessWidget {
       child: Container(
         height: 200,
         color: Colors.red,
+        child: Column(
+          children: [
+            
+          ],
+        ),
       ),
     );
   }

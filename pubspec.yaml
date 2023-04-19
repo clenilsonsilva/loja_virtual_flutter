@@ -32,6 +32,8 @@ dependencies:
   url_launcher: ^6.1.10
   flutter_svg: ^2.0.5
   flip_card: ^0.7.0
+  mask_text_input_formatter: ^2.4.0
+  credit_card_type_detector: ^3.0.0
 
 dev_dependencies:
   flutter_test:
