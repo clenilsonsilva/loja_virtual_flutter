@@ -8,12 +8,17 @@ import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'card_text_field.dart';
 
 class CardFront extends StatelessWidget {
-  CardFront({super.key});
+  CardFront({super.key, required this.numberFocus, required this.dateFocus, required this.nameFocus, required this.finished});
 
   final dateFormatter = MaskTextInputFormatter(
     mask: '!#/####',
     filter: {'#': RegExp('[0-9]'), '!': RegExp('[0-1]')},
   );
+
+  final FocusNode numberFocus;
+  final FocusNode dateFocus;
+  final FocusNode nameFocus;
+  final VoidCallback finished;
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +52,10 @@ class CardFront extends StatelessWidget {
                         return null;
                       }
                     },
+                    focusNode: numberFocus,
+                    onSubmitted: (_) {
+                      dateFocus.requestFocus();
+                    },
                   ),
                   CardTextField(
                     title: 'Validade',
@@ -62,6 +71,10 @@ class CardFront extends StatelessWidget {
                         return null;
                       }
                     },
+                    focusNode: dateFocus,
+                    onSubmitted: (_) {
+                      nameFocus.requestFocus();
+                    },
                   ),
                   CardTextField(
                     bold: true,
@@ -74,6 +87,10 @@ class CardFront extends StatelessWidget {
                       } else {
                         return null;
                       }
+                    },
+                    focusNode: nameFocus,
+                    onSubmitted: (_) {
+                      finished();
                     },
                   ),
                 ],

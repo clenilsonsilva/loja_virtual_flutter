@@ -8,6 +8,11 @@ class CreditCardWidget extends StatelessWidget {
   CreditCardWidget({super.key});
 
   final cardKey = GlobalKey<FlipCardState>();
+  final numberFocus = FocusNode();
+  final dateFocus = FocusNode();
+  final nameFocus = FocusNode();
+  final cvvFocus = FocusNode();
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -20,8 +25,18 @@ class CreditCardWidget extends StatelessWidget {
             flipOnTouch: false,
             direction: FlipDirection.HORIZONTAL,
             speed: 700,
-            front: CardFront(),
-            back: CardBack(),
+            front: CardFront(
+              nameFocus: nameFocus,
+              dateFocus: dateFocus,
+              numberFocus: numberFocus,
+              finished: () {
+                cardKey.currentState?.toggleCard();
+                cvvFocus.requestFocus();
+              },
+            ),
+            back: CardBack(
+              cvvFocus: cvvFocus,
+            ),
           ),
           ElevatedButton(
             onPressed: () {

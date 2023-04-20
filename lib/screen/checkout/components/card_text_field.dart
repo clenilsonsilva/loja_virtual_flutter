@@ -12,7 +12,10 @@ class CardTextField extends StatelessWidget {
     this.validator,
     this.maxLength = 0,
     this.textAlign = TextAlign.start,
-  });
+    required this.focusNode,
+    required this.onSubmitted,
+  }) : textInputAction =
+            onSubmitted == null ? TextInputAction.done : TextInputAction.next;
 
   final String title, hint;
   final bool bold;
@@ -21,6 +24,9 @@ class CardTextField extends StatelessWidget {
   final FormFieldValidator? validator;
   final int maxLength;
   final TextAlign textAlign;
+  final FocusNode focusNode;
+  final Function(String)? onSubmitted;
+  final TextInputAction textInputAction;
 
   @override
   Widget build(BuildContext context) {
@@ -81,6 +87,9 @@ class CardTextField extends StatelessWidget {
                   maxLength: maxLength == 0 ? null : maxLength,
                   textAlign: textAlign,
                   cursorColor: Colors.white,
+                  focusNode: focusNode,
+                  onFieldSubmitted: onSubmitted,
+                  textInputAction: textInputAction,
                 ),
               ],
             ),

@@ -3,7 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:loja_virtual/screen/checkout/components/card_text_field.dart';
 
 class CardBack extends StatelessWidget {
-  const CardBack({super.key});
+  const CardBack({super.key, required this.cvvFocus});
+
+  final FocusNode cvvFocus;
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +47,8 @@ class CardBack extends StatelessWidget {
                             return null;
                           }
                         },
+                        focusNode: cvvFocus,
+                        onSubmitted: null,
                       ),
                     )),
                 const Expanded(
