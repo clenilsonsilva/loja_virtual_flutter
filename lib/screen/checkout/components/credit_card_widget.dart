@@ -1,3 +1,4 @@
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
 
@@ -39,8 +40,10 @@ class CreditCardWidget extends StatelessWidget {
             ),
           ),
           ElevatedButton(
-            onPressed: () {
+            onPressed: () async {
               cardKey.currentState?.toggleCard();
+              final response = await FirebaseFunctions.instance.httpsCallable('getUserData').call();
+              print(response.data);
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.transparent,
