@@ -18,3 +18,16 @@ export const getUserData = functions.https.onCall(async (data, context) => {
     .doc(context.auth.uid).get();
   return {"data": snapshot.data()};
 });
+
+export const addMessage = functions.https.onCall(async (data, context) => {
+  console.log(data);
+
+  const snapshot = await admin.firestore().collection("messages").add(data);
+  return {"success": snapshot.id};
+});
+
+export const onNewOrder = functions.firestore.document("orders/{orderId}")
+  .onCreate((snapshot, context) => {
+    const orderId = context.params.orderId;
+    console.log(orderId);
+  });

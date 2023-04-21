@@ -42,7 +42,9 @@ class CreditCardWidget extends StatelessWidget {
           ElevatedButton(
             onPressed: () async {
               cardKey.currentState?.toggleCard();
-              final response = await FirebaseFunctions.instance.httpsCallable('getUserData').call();
+              final response = await FirebaseFunctions.instance.httpsCallable('addMessage').call(
+                {"teste": "Clenilson"}
+              );
               print(response.data);
             },
             style: ElevatedButton.styleFrom(
