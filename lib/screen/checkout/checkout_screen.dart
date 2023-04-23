@@ -69,6 +69,13 @@ class CheckoutScreen extends StatelessWidget {
                               Navigator.of(context).popUntil(
                                   (route) => route.settings.name == '/cart');
                             },
+                            onPayFail: (e) {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                content: Text('Falha ao Pagar: $e'),
+                                backgroundColor: Colors.red,
+                              ));
+                            },
                             onSucess: (order) {
                               Navigator.of(context).popUntil(
                                   (route) => route.settings.name == '/');

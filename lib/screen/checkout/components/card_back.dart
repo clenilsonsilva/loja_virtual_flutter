@@ -37,6 +37,7 @@ class CardBack extends StatelessWidget {
                           vertical: 4, horizontal: 8),
                       color: Colors.grey,
                       child: CardTextField(
+                        initialValue: creditCard.securityCode,
                         textAlign: TextAlign.end,
                         hint: '123',
                         inputFormatters: [

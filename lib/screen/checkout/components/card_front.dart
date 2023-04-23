@@ -9,7 +9,13 @@ import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'card_text_field.dart';
 
 class CardFront extends StatelessWidget {
-  CardFront({super.key, required this.numberFocus, required this.dateFocus, required this.nameFocus, required this.finished, required this.creditCard});
+  CardFront(
+      {super.key,
+      required this.numberFocus,
+      required this.dateFocus,
+      required this.nameFocus,
+      required this.finished,
+      required this.creditCard});
 
   final dateFormatter = MaskTextInputFormatter(
     mask: '!#/####',
@@ -40,6 +46,7 @@ class CardFront extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   CardTextField(
+                    initialValue: creditCard.number,
                     bold: true,
                     title: 'Número',
                     hint: '0000 0000 0000 0000',
@@ -52,8 +59,7 @@ class CardFront extends StatelessWidget {
                       List<CreditCardType> lista = detectCCType(numero);
                       if (numero.length != 19 || lista.isEmpty) {
                         return 'Inválido';
-                      }
-                      else {
+                      } else {
                         return null;
                       }
                     },
@@ -64,6 +70,7 @@ class CardFront extends StatelessWidget {
                     onSaved: creditCard.setNumber,
                   ),
                   CardTextField(
+                    initialValue: creditCard.expirationDate,
                     title: 'Validade',
                     hint: '00/0000',
                     textInputType: TextInputType.number,
@@ -84,6 +91,7 @@ class CardFront extends StatelessWidget {
                     onSaved: creditCard.setExpirationDate,
                   ),
                   CardTextField(
+                    initialValue: creditCard.holder,
                     bold: true,
                     title: 'Titular',
                     hint: 'Clenilson da Silva',
