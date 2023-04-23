@@ -1,18 +1,21 @@
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
+import 'package:loja_virtual/models/credit_card.dart';
 
 import 'card_back.dart';
 import 'card_front.dart';
 
 class CreditCardWidget extends StatelessWidget {
-  CreditCardWidget({super.key});
+  CreditCardWidget({super.key, required this.creditCard});
 
   final cardKey = GlobalKey<FlipCardState>();
   final numberFocus = FocusNode();
   final dateFocus = FocusNode();
   final nameFocus = FocusNode();
   final cvvFocus = FocusNode();
+
+  final CreditCard creditCard;
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +30,7 @@ class CreditCardWidget extends StatelessWidget {
             direction: FlipDirection.HORIZONTAL,
             speed: 700,
             front: CardFront(
+              creditCard: creditCard,
               nameFocus: nameFocus,
               dateFocus: dateFocus,
               numberFocus: numberFocus,
@@ -36,6 +40,7 @@ class CreditCardWidget extends StatelessWidget {
               },
             ),
             back: CardBack(
+              creditCard: creditCard,
               cvvFocus: cvvFocus,
             ),
           ),
@@ -45,7 +50,6 @@ class CreditCardWidget extends StatelessWidget {
               final response = await FirebaseFunctions.instance.httpsCallable('addMessage').call(
                 {"teste": "Clenilson"}
               );
-              print(response.data);
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.transparent,

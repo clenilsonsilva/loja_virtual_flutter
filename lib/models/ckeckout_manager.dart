@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+import '../services/cielo_payment.dart';
 import 'cart_manager.dart';
+import 'credit_card.dart';
 import 'order.dart';
 import 'product.dart';
 
@@ -16,6 +18,7 @@ class CheckoutManager extends ChangeNotifier {
   }
 
   final firestore = FirebaseFirestore.instance;
+  final cieloPayment = CieloPayment();
 
   void updateCart(CartManager value) {
     cartManager = value;
@@ -23,25 +26,35 @@ class CheckoutManager extends ChangeNotifier {
   }
 
   Future<void> checkout(
-      {required Function onStockFail, required Function onSucess}) async {
+      {required CreditCard creditCard,
+      required Function onStockFail,
+      required Function onSucess}) async {
     loading = true;
-    try {
-      await _decrementStock();
-    } catch (e) {
-      onStockFail(e);
-      loading = false;
-      return;
-    }
+
     final orderId = await _getOrderId();
 
-    final order = Orderr.fromCartManager(cartManager!);
-    order.orderId = orderId.toString();
+    cieloPayment.authorize(
+        creditCard: creditCard,
+        price: cartManager!.totalPrice,
+        orderId: orderId.toString(),
+        user: cartManager!.user!);
 
-    await order.save();
+    // try {
+    //   await _decrementStock();
+    // } catch (e) {
+    //   onStockFail(e);
+    //   loading = false;
+    //   return;
+    // }
 
-    cartManager?.clear();
+    // final order = Orderr.fromCartManager(cartManager!);
+    // order.orderId = orderId.toString();
 
-    onSucess(order);
+    // await order.save();
+
+    // cartManager?.clear();
+
+    //onSucess(order);
 
     loading = false;
   }

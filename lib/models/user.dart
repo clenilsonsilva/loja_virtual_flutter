@@ -3,20 +3,22 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'address.dart';
 
 class Userr {
-  Userr(
-      {this.email = '',
-      this.pass = '',
-      this.confirmPassword = '',
-      this.name = '',
-      this.id = ''});
+  Userr({
+    this.email = '',
+    this.pass = '',
+    this.confirmPassword = '',
+    this.name = '',
+    this.id = '',
+    this.cpf = '',
+  });
 
   Userr.fromDocument(DocumentSnapshot doc) {
     email = doc['email'];
     name = doc['name'];
     id = doc.id;
+    cpf = doc['cpf'];
     Map<String, dynamic> dataMap = doc.data() as Map<String, dynamic>;
-    print(dataMap);
-    if(dataMap.containsKey('address')){
+    if (dataMap.containsKey('address')) {
       address = Address.fromMap(doc['address']);
     }
   }
@@ -25,6 +27,7 @@ class Userr {
   late String email;
   late String pass;
   late String name;
+  late String? cpf;
   late String confirmPassword;
   bool admin = false;
 
@@ -44,11 +47,17 @@ class Userr {
       'name': name,
       'email': email,
       if (address?.toMap() != null) 'address': address!.toMap(),
+      if (cpf != null) 'cpf': cpf,
     };
   }
 
   void setAddress(Address address) {
     this.address = address;
+    saveData();
+  }
+
+  void setCpf(String? cpf) {
+    this.cpf = cpf ?? '';
     saveData();
   }
 }
