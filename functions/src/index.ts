@@ -2,7 +2,9 @@ import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 
 import {
-  CieloConstructor, Cielo, TransactionCreditCardRequestModel, EnumBrands}
+  CieloConstructor, Cielo, TransactionCreditCardRequestModel, EnumBrands,
+  CaptureRequestModel,
+  CancelTransactionRequestModel}
   from "cielo";
 
 admin.initializeApp(functions.config().firebase);
@@ -160,6 +162,104 @@ export const authorizeCreditCard = functions.https.onCall(async (da, con) => {
           "code": transaction.payment.returnCode,
           "message": message,
         },
+      };
+    }
+  } catch (error) {
+    console.error("Error ", error);
+    return {
+      "sucess": false,
+      "error": {
+        "code": error,
+        "message": error,
+      },
+    };
+  }
+});
+
+export const captureCreditCard = functions.https.onCall(async (da, con) => {
+  if (da === null) {
+    return {
+      "success": false,
+      "error": {
+        "code": -1,
+        "message": "Dados nao informados",
+      },
+    };
+  }
+  if (!con.auth) {
+    return {
+      "success": false,
+      "error": {
+        "code": -1,
+        "message": "Nenhum usuario logado",
+      },
+    };
+  }
+
+  const captureParams: CaptureRequestModel = {
+    paymentId: da.payId,
+  };
+
+  try {
+    const capt = await cielo.creditCard.captureSaleTransaction(captureParams);
+
+    if (capt.status === 2) {
+      return {"success": true};
+    } else {
+      return {
+        "success": false,
+        "status": capt.status,
+        "error": capt.returnCode,
+        "message": capt.returnMessage,
+      };
+    }
+  } catch (error) {
+    console.error("Error ", error);
+    return {
+      "sucess": false,
+      "error": {
+        "code": error,
+        "message": error,
+      },
+    };
+  }
+});
+
+export const cancelCreditCard = functions.https.onCall(async (da, con) => {
+  if (da === null) {
+    return {
+      "success": false,
+      "error": {
+        "code": -1,
+        "message": "Dados nao informados",
+      },
+    };
+  }
+  if (!con.auth) {
+    return {
+      "success": false,
+      "error": {
+        "code": -1,
+        "message": "Nenhum usuario logado",
+      },
+    };
+  }
+
+  const cancelParams: CancelTransactionRequestModel = {
+    paymentId: da.payId,
+  };
+
+  try {
+    const cancel = await cielo.creditCard.cancelTransaction(cancelParams);
+
+    if (cancel.status === 10 || cancel.status === 11) {
+      return {"success": true};
+    } else {
+      return {
+        "success": false,
+        "status": cancel.status,
+        "error": cancel.returnCode,
+        "message": cancel.returnMessage,
       };
     }
   } catch (error) {

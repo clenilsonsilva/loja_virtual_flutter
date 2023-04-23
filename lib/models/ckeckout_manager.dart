@@ -31,13 +31,13 @@ class CheckoutManager extends ChangeNotifier {
     required Function onSucess,
     required Function onPayFail,
   }) async {
-
     loading = true;
 
     final orderId = await _getOrderId();
+    String payId = '';
 
     try {
-      String payId = await cieloPayment.authorize(
+      payId = await cieloPayment.authorize(
           creditCard: creditCard,
           price: cartManager!.totalPrice,
           orderId: orderId.toString(),
@@ -49,22 +49,31 @@ class CheckoutManager extends ChangeNotifier {
       return;
     }
 
-    // try {
-    //   await _decrementStock();
-    // } catch (e) {
-    //   onStockFail(e);
-    //   loading = false;
-    //   return;
-    // }
+    try {
+      await _decrementStock();
+    } catch (e) {
+      onStockFail(e);
+      loading = false;
+      return;
+    }
 
-    // final order = Orderr.fromCartManager(cartManager!);
-    // order.orderId = orderId.toString();
+    try {
+      await cieloPayment.capture(payId);
+    } catch (e) {
+      onPayFail(e);
+      loading = false;
+      return;
+    }
 
-    // await order.save();
+    final order = Orderr.fromCartManager(cartManager!);
+    order.orderId = orderId.toString();
+    order.payId = payId;
 
-    // cartManager?.clear();
+    await order.save();
 
-    //onSucess(order);
+    cartManager?.clear();
+
+    onSucess(order);
 
     loading = false;
   }

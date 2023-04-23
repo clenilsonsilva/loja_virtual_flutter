@@ -35,4 +35,34 @@ class CieloPayment {
       return Future.error('Falha ao processar transação. Tente novamente.');
     }
   }
+
+  Future<void> capture(String payId) async {
+    final Map<String, dynamic> captureData = {
+      'payId': payId,
+    };
+    final callable = functions.httpsCallable('captureCreditCard');
+    final response = await callable.call(captureData);
+    final data = Map<String, dynamic>.from(response.data);
+    if (data['success']) {
+      debugPrint('Captura realizada com sucesso');
+    } else {
+      debugPrint('${data['error']['message']}');
+      return Future.error(data['error']['message']);
+    }
+  }
+
+  Future<void> cancel(String? payId) async {
+    final Map<String, dynamic> cancelData = {
+      'payId': payId,
+    };
+    final callable = functions.httpsCallable('cancelCreditCard');
+    final response = await callable.call(cancelData);
+    final data = Map<String, dynamic>.from(response.data);
+    if (data['success']) {
+      debugPrint('Cancelamento realizado com sucesso');
+    } else {
+      debugPrint('${data['error']['message']}');
+      return Future.error(data['error']['message']);
+    }
+  }
 }

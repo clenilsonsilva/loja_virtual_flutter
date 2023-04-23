@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:loja_virtual/services/cielo_payment.dart';
 
 import 'address.dart';
 import 'cart_manager.dart';
@@ -27,6 +29,7 @@ class Orderr {
     address = Address.fromMap(doc['address']);
     date = doc['date'];
     status = Status.values[doc['status']];
+    payId = doc['payId'];
   }
 
   final firestore = FirebaseFirestore.instance;
@@ -47,11 +50,14 @@ class Orderr {
         'address': address?.toMap(),
         'status': status?.index,
         'date': Timestamp.now(),
+        'payId': payId,
       },
     );
   }
 
   String? orderId;
+
+  String? payId;
 
   List<CartProduct>? items;
   num? price;
@@ -94,9 +100,15 @@ class Orderr {
     }
   }
 
-  void cancel() {
-    status = Status.canceled;
-    firestoreRef.update({'status': status?.index ?? 1});
+  Future<void> cancel() async {
+    try {
+      await CieloPayment().cancel(payId);
+      status = Status.canceled;
+      firestoreRef.update({'status': status?.index ?? 1});
+    } catch (e) {
+      debugPrint('Erro ao Cancelar');
+      return Future.error('Falha ao cancelar');
+    }
   }
 
   static String? getStatusText(Status? status) {
