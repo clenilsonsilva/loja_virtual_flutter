@@ -45,7 +45,7 @@ class ProductsScreen extends StatelessWidget {
           },
         ),
         centerTitle: true,
-        backgroundColor: Theme.of(context).primaryColor,
+        backgroundColor: Colors.transparent,
         actions: [
           Consumer<ProductManager>(
             builder: (context, value, child) {
@@ -89,16 +89,34 @@ class ProductsScreen extends StatelessWidget {
           )
         ],
       ),
-      body: Consumer<ProductManager>(
-        builder: (context, value, child) {
-          final filteredProducts = value.filteredProducts;
-          return ListView.builder(
-            itemCount: filteredProducts.length,
-            itemBuilder: (_, index) {
-              return ProductsListTile(product: filteredProducts[index]);
+      body: Stack(
+        children: [
+          Container(
+            decoration: const BoxDecoration(
+              gradient: SweepGradient(
+                colors: [
+                  Colors.blue,
+                  Colors.green,
+                  Colors.yellow,
+                  Colors.red,
+                  Colors.blue
+                ],
+                stops: [0.0, 0.25, 0.5, 0.75, 1],
+              ),
+            ),
+          ),
+          Consumer<ProductManager>(
+            builder: (context, value, child) {
+              final filteredProducts = value.filteredProducts;
+              return ListView.builder(
+                itemCount: filteredProducts.length,
+                itemBuilder: (_, index) {
+                  return ProductsListTile(product: filteredProducts[index]);
+                },
+              );
             },
-          );
-        },
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -108,6 +126,7 @@ class ProductsScreen extends StatelessWidget {
         foregroundColor: Theme.of(context).primaryColor,
         child: const Icon(Icons.shopping_cart),
       ),
+      extendBodyBehindAppBar: true,
     );
   }
 }

@@ -52,6 +52,7 @@ class UserManager extends ChangeNotifier {
       final DocumentSnapshot docUser =
           await firestore.collection('users').doc(currentUser.uid).get();
       usuario = Userr.fromDocument(docUser);
+      usuario!.saveToken();
 
       final docAdmin =
           await firestore.collection('admins').doc(usuario!.id).get();
@@ -72,7 +73,9 @@ class UserManager extends ChangeNotifier {
 
       usuario = user;
 
-      await user.saveData();
+      user.saveData();
+
+      await user.saveToken();
 
       onSucess();
       notifyListeners();

@@ -27,7 +27,7 @@ class _AdminOrdersScrrenState extends State<AdminOrdersScrren> {
       appBar: AppBar(
         title: const Text('Todos os Pedidos'),
         centerTitle: true,
-        backgroundColor: pc,
+        backgroundColor: Colors.transparent,
       ),
       body: Consumer<AdminOrdersManager>(
         builder: (_, ordersManager, __) {
@@ -35,50 +35,68 @@ class _AdminOrdersScrrenState extends State<AdminOrdersScrren> {
 
           return SlidingUpPanel(
             controller: panelController,
-            body: Column(
+            body: Stack(
               children: [
-                if (ordersManager.userFilter != null)
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(16, 0, 16, 2),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            'Pedidos de ${ordersManager.userFilter?.name}',
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w800,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                        CustomIconButton(
-                          iconData: Icons.close,
-                          color: Colors.white,
-                          ontap: () {
-                            ordersManager.setUserFilter(null);
-                          },
-                        ),
+                Container(
+                  decoration: const BoxDecoration(
+                    gradient: SweepGradient(
+                      colors: [
+                        Colors.blue,
+                        Colors.green,
+                        Colors.yellow,
+                        Colors.red,
+                        Colors.blue
                       ],
+                      stops: [0.0, 0.25, 0.5, 0.75, 1],
                     ),
                   ),
-                filteredOrders.isEmpty
-                    ? const Expanded(
-                        child: EmptyCard(
-                          iconData: Icons.border_clear,
-                          title: 'Nenhuma Venda realizada',
-                        ),
-                      )
-                    : Expanded(
-                        child: ListView.builder(
-                          itemCount: filteredOrders.length,
-                          itemBuilder: (_, index) {
-                            return OrderTile(
-                              showControls: true,
-                              order: filteredOrders[index],
-                            );
-                          },
+                ),
+                Column(
+                  children: [
+                    if (ordersManager.userFilter != null)
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(16, 0, 16, 2),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                'Pedidos de ${ordersManager.userFilter?.name}',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w800,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                            CustomIconButton(
+                              iconData: Icons.close,
+                              color: Colors.white,
+                              ontap: () {
+                                ordersManager.setUserFilter(null);
+                              },
+                            ),
+                          ],
                         ),
                       ),
+                    filteredOrders.isEmpty
+                        ? const Expanded(
+                            child: EmptyCard(
+                              iconData: Icons.border_clear,
+                              title: 'Nenhuma Venda realizada',
+                            ),
+                          )
+                        : Expanded(
+                            child: ListView.builder(
+                              itemCount: filteredOrders.length,
+                              itemBuilder: (_, index) {
+                                return OrderTile(
+                                  showControls: true,
+                                  order: filteredOrders[index],
+                                );
+                              },
+                            ),
+                          ),
+                  ],
+                ),
               ],
             ),
             minHeight: 40,

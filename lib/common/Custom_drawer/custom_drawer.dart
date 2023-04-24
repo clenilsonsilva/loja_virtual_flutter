@@ -15,13 +15,15 @@ class CustomDrawer extends StatelessWidget {
         children: [
           Container(
             decoration: const BoxDecoration(
-              gradient: LinearGradient(
+              gradient: SweepGradient(
                 colors: [
-                  Color.fromARGB(255, 150, 236, 241),
-                  Colors.white,
+                  Colors.blue,
+                  Colors.green,
+                  Colors.yellow,
+                  Colors.red,
+                  Colors.blue
                 ],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
+                stops: [0.0, 0.25, 0.5, 0.75, 1],
               ),
             ),
           ),
@@ -67,7 +69,7 @@ class CustomDrawer extends StatelessWidget {
                     ],
                   );
                 } else {
-                  return  Container();
+                  return Container();
                 }
               })
             ],

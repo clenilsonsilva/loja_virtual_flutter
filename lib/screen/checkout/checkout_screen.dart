@@ -26,72 +26,90 @@ class CheckoutScreen extends StatelessWidget {
         appBar: AppBar(
           title: const Text('Pagamento'),
           centerTitle: true,
-          backgroundColor: Theme.of(context).primaryColor,
+          backgroundColor: Colors.transparent,
         ),
-        body: Consumer<CheckoutManager>(
-          builder: (_, checkoutManager, child) {
-            if (checkoutManager.loading) {
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation(Colors.white),
+        body: Stack(
+          children: [
+            Container(
+            decoration: const BoxDecoration(
+              gradient: SweepGradient(
+                colors: [
+                  Colors.blue,
+                  Colors.green,
+                  Colors.yellow,
+                  Colors.red,
+                  Colors.blue
+                ],
+                stops: [0.0, 0.25, 0.5, 0.75, 1],
+              ),
+            ),
+          ),
+            Consumer<CheckoutManager>(
+              builder: (_, checkoutManager, child) {
+                if (checkoutManager.loading) {
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation(Colors.white),
+                        ),
+                        SizedBox(height: 16),
+                        Text(
+                          'Processando o seu pagamento...',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w800,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ],
                     ),
-                    SizedBox(height: 16),
-                    Text(
-                      'Processando o seu pagamento...',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w800,
-                        fontSize: 16,
-                      ),
+                  );
+                } else {
+                  return Form(
+                    key: formKey,
+                    child: ListView(
+                      children: [
+                        CreditCardWidget(creditCard: creditCard),
+                        const CpfField(),
+                        PriceCard(
+                          buttonText: 'Finalizar Pedido',
+                          onPressed: () {
+                            if (formKey.currentState!.validate()) {
+                              formKey.currentState?.save();
+                              checkoutManager.checkout(
+                                creditCard: creditCard,
+                                onStockFail: (e) {
+                                  Navigator.of(context).popUntil(
+                                      (route) => route.settings.name == '/cart');
+                                },
+                                onPayFail: (e) {
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(SnackBar(
+                                    content: Text('Falha ao Pagar: $e'),
+                                    backgroundColor: Colors.red,
+                                  ));
+                                },
+                                onSucess: (order) {
+                                  Navigator.of(context).popUntil(
+                                      (route) => route.settings.name == '/');
+                                  Navigator.of(context)
+                                      .pushNamed('/confirmation', arguments: order);
+                                },
+                              );
+                            }
+                          },
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              );
-            } else {
-              return Form(
-                key: formKey,
-                child: ListView(
-                  children: [
-                    CreditCardWidget(creditCard: creditCard),
-                    const CpfField(),
-                    PriceCard(
-                      buttonText: 'Finalizar Pedido',
-                      onPressed: () {
-                        if (formKey.currentState!.validate()) {
-                          formKey.currentState?.save();
-                          print(creditCard);
-                          checkoutManager.checkout(
-                            creditCard: creditCard,
-                            onStockFail: (e) {
-                              Navigator.of(context).popUntil(
-                                  (route) => route.settings.name == '/cart');
-                            },
-                            onPayFail: (e) {
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(SnackBar(
-                                content: Text('Falha ao Pagar: $e'),
-                                backgroundColor: Colors.red,
-                              ));
-                            },
-                            onSucess: (order) {
-                              Navigator.of(context).popUntil(
-                                  (route) => route.settings.name == '/');
-                              Navigator.of(context)
-                                  .pushNamed('/confirmation', arguments: order);
-                            },
-                          );
-                        }
-                      },
-                    ),
-                  ],
-                ),
-              );
-            }
-          },
+                  );
+                }
+              },
+            ),
+          ],
         ),
+        extendBodyBehindAppBar: true,
       ),
     );
   }

@@ -16,38 +16,57 @@ class CartScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Carrinho'),
         centerTitle: true,
-        backgroundColor: Theme.of(context).primaryColor,
+        backgroundColor: Colors.transparent,
       ),
-      body: Consumer<CartManager>(
-        builder: (_, cartManager, __) {
-          if (cartManager.user == null) {
-            return const LoginCard();
-          } else if (cartManager.items.isEmpty) {
-            return const EmptyCard(
-              iconData: Icons.remove_shopping_cart,
-              title: 'Nenhum Produto no carrinho',
-            );
-          }
-          return ListView(
-            children: [
-              Column(
-                children: cartManager.items
-                    .map((cartProduct) => CartTile(
-                          cartProduct: cartProduct,
-                        ))
-                    .toList(),
+      body: Stack(
+        children: [
+          Container(
+            decoration: const BoxDecoration(
+              gradient: SweepGradient(
+                colors: [
+                  Colors.blue,
+                  Colors.green,
+                  Colors.yellow,
+                  Colors.red,
+                  Colors.blue
+                ],
+                stops: [0.0, 0.25, 0.5, 0.75, 1],
               ),
-              PriceCard(
-                  buttonText: 'Continuar para Entrega',
-                  onPressed: cartManager.isCartValid
-                      ? () {
-                          Navigator.of(context).pushNamed('/address');
-                        }
-                      : null),
-            ],
-          );
-        },
+            ),
+          ),
+          Consumer<CartManager>(
+            builder: (_, cartManager, __) {
+              if (cartManager.user == null) {
+                return const LoginCard();
+              } else if (cartManager.items.isEmpty) {
+                return const EmptyCard(
+                  iconData: Icons.remove_shopping_cart,
+                  title: 'Nenhum Produto no carrinho',
+                );
+              }
+              return ListView(
+                children: [
+                  Column(
+                    children: cartManager.items
+                        .map((cartProduct) => CartTile(
+                              cartProduct: cartProduct,
+                            ))
+                        .toList(),
+                  ),
+                  PriceCard(
+                      buttonText: 'Continuar para Entrega',
+                      onPressed: cartManager.isCartValid
+                          ? () {
+                              Navigator.of(context).pushNamed('/address');
+                            }
+                          : null),
+                ],
+              );
+            },
+          ),
+        ],
       ),
+      extendBodyBehindAppBar: true,
     );
   }
 }

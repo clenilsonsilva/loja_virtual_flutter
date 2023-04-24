@@ -27,14 +27,14 @@ class DrawerTile extends StatelessWidget {
               child: Icon(
                 icondata,
                 size: 32,
-                color: curPage == page ? primaryColor : Colors.grey[700],
+                color: curPage == page ? Colors.white : Colors.black,
               ),
             ),
             Text(
               title,
               style: TextStyle(
                 fontSize: 16,
-                color: curPage == page ? primaryColor : Colors.grey[700],
+                color: curPage == page ? Colors.white : Colors.black,
               ),
             ),
           ],

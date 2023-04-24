@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -41,10 +42,10 @@ class _BaseScreenState extends State<BaseScreen> {
               const HomeScreen(),
               const ProductsScreen(),
               const OrdersScreen(),
-              StoresScreen(),
+              const StoresScreen(),
               if (userManager.adminEnabled) ...[
                 AdminUsersScreen(),
-                AdminOrdersScrren(),
+                const AdminOrdersScrren(),
               ]
             ],
           );

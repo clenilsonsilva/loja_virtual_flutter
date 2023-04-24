@@ -295,7 +295,82 @@ export const addMessage = functions.https.onCall(async (data, context) => {
 });
 
 export const onNewOrder = functions.firestore.document("orders/{orderId}")
-  .onCreate((snapshot, context) => {
+  .onCreate(async (snapshot, context) => {
     const orderId = context.params.orderId;
-    console.log(orderId);
+
+    const querySnapshot = await admin.firestore().collection("admins").get();
+
+    const admins = querySnapshot.docs.map((doc) => doc.id);
+
+    let adminTokens: string[] = [];
+    for (let i = 0; i < admins.length; i++) {
+      const tokensAdmin: string[] = await getDeviceTokens(admins[i]);
+      adminTokens = adminTokens.concat(tokensAdmin);
+    }
+    await sendPushFCM(
+      adminTokens,
+      "Novo Pedido",
+      "Nova venda Realizada. Pedido " + orderId,
+    );
   });
+
+const orderStatus = new Map([
+  [0, "Cancelado"],
+  [1, "Em separacao"],
+  [2, "Em transporte"],
+  [3, "Entregue"],
+]);
+
+export const onOrStatChang = functions.firestore.document("/orders/{orderId}")
+  .onUpdate(async (snapshot, context) => {
+    const beforeStatus = snapshot.before.data().status;
+    const afterStatus = snapshot.after.data().status;
+
+    if (beforeStatus !== afterStatus) {
+      const tokensUser = await getDeviceTokens(snapshot.after.data().user);
+      await sendPushFCM(
+        tokensUser,
+        "Pedido: " + context.params.orderId,
+        "Status atualizado para: " + orderStatus.get(afterStatus),
+      );
+    }
+  });
+
+
+async function getDeviceTokens(uid: string) {
+  const querySnapshot = await admin.firestore().collection("users")
+    .doc(uid).collection("tokens").get();
+
+  const tokens = querySnapshot.docs.map((doc) => doc.id);
+
+  return tokens;
+}
+
+async function sendPushFCM(tokens: string[], title: string, message: string) {
+  if (tokens.length > 0) {
+    return admin.messaging().send({
+      token: tokens[0],
+      data: {
+        title: title,
+        body: message,
+        click_action: "FLUTTER_NOTIFICATION_CLICK",
+      },
+      android: {
+        priority: "high",
+      },
+      apns: {
+        payload: {
+          aps: {
+            contentAvailable: true,
+          },
+        },
+        headers: {
+          "apns-push-type": "background",
+          "apns-priority": "5",
+          "apns-topic": "io.flutter.plugins.firebase.messaging",
+        },
+      },
+    });
+  }
+  return;
+}

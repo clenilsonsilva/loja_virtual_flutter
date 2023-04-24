@@ -22,7 +22,6 @@ class ProductScreen extends StatelessWidget {
           appBar: AppBar(
             title: Text(product.name),
             centerTitle: true,
-            backgroundColor: primaryColor,
             actions: [
               Consumer<UserManager>(
                 builder: (_, userManager, __) {
@@ -41,134 +40,155 @@ class ProductScreen extends StatelessWidget {
                 },
               ),
             ],
+            backgroundColor: Colors.transparent,
           ),
-          backgroundColor: Colors.white,
-          body: ListView(
+          body: Stack(
             children: [
-              CarouselSlider(
-                items: product.images
-                    .map(
-                      (url) => SizedBox(
-                        child: Image.network(url),
-                      ),
-                    )
-                    .toList(),
-                options: CarouselOptions(
-                  autoPlay: false,
-                  height: size.height * 0.5,
+              Container(
+                decoration: const BoxDecoration(
+                  gradient: SweepGradient(
+                    colors: [
+                      Colors.blue,
+                      Colors.green,
+                      Colors.yellow,
+                      Colors.red,
+                      Colors.blue
+                    ],
+                    stops: [0.0, 0.25, 0.5, 0.75, 1],
+                  ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Text(
-                      product.name,
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600,
-                      ),
+              ListView(
+                children: [
+                  CarouselSlider(
+                    items: product.images
+                        .map(
+                          (url) => SizedBox(
+                            child: Image.network(url),
+                          ),
+                        )
+                        .toList(),
+                    options: CarouselOptions(
+                      autoPlay: false,
+                      height: size.height * 0.5,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 8),
-                      child: Text(
-                        'A partir de',
-                        style: TextStyle(color: Colors.grey[600], fontSize: 13),
-                      ),
-                    ),
-                    Text(
-                      'R\$ ${product.basePrice.toStringAsFixed(2)}',
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                        color: primaryColor,
-                      ),
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.only(top: 16, bottom: 8),
-                      child: Text(
-                        'Descrição',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 16,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text(
+                          product.name,
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
-                      ),
-                    ),
-                    Text(
-                      product.description,
-                      style: const TextStyle(
-                        fontSize: 16,
-                      ),
-                    ),
-                    if (product.deleted == true)
-                      const Padding(
-                        padding: EdgeInsets.only(top: 16, bottom: 8),
-                        child: Text(
-                          'Indisponivel',
-                          style: TextStyle(fontSize: 16, color: Colors.red),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8),
+                          child: Text(
+                            'A partir de',
+                            style: TextStyle(
+                                color: Colors.grey[600], fontSize: 13),
+                          ),
                         ),
-                      )
-                    else ...[
-                      const Padding(
-                        padding: EdgeInsets.only(top: 16, bottom: 8),
-                        child: Text(
-                          'Tamanhos',
+                        Text(
+                          'R\$ ${product.basePrice.toStringAsFixed(2)}',
                           style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            color: primaryColor,
+                          ),
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.only(top: 16, bottom: 8),
+                          child: Text(
+                            'Descrição',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                        Text(
+                          product.description,
+                          style: const TextStyle(
                             fontSize: 16,
                           ),
                         ),
-                      ),
-                      Wrap(
-                        spacing: 8,
-                        runSpacing: 8,
-                        children: product.sizes.map((s) {
-                          return SizeWidget(size: s);
-                        }).toList(),
-                      ),
-                    ],
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    product.hasStock
-                        ? Consumer2<UserManager, Product>(
-                            builder: (_, userManager, product, __) {
-                              return SizedBox(
-                                height: 44,
-                                child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                      backgroundColor:
-                                          Theme.of(context).primaryColor),
-                                  onPressed: product.selectedSize.name.isEmpty
-                                      ? null
-                                      : () {
-                                          if (userManager.isLoggedIn) {
-                                            context
-                                                .read<CartManager>()
-                                                .addToCart(product);
-                                            Navigator.of(context)
-                                                .pushNamed('/cart');
-                                          } else {
-                                            Navigator.of(context)
-                                                .pushNamed('/login');
-                                          }
-                                        },
-                                  child: Text(
-                                    userManager.isLoggedIn
-                                        ? 'Adicionar ao Carrinho'
-                                        : 'Entre para Comprar',
-                                    style: const TextStyle(fontSize: 18),
-                                  ),
-                                ),
-                              );
-                            },
+                        if (product.deleted == true)
+                          const Padding(
+                            padding: EdgeInsets.only(top: 16, bottom: 8),
+                            child: Text(
+                              'Indisponivel',
+                              style: TextStyle(fontSize: 16, color: Colors.red),
+                            ),
                           )
-                        : const SizedBox()
-                  ],
-                ),
-              )
+                        else ...[
+                          const Padding(
+                            padding: EdgeInsets.only(top: 16, bottom: 8),
+                            child: Text(
+                              'Tamanhos',
+                              style: TextStyle(
+                                fontSize: 16,
+                              ),
+                            ),
+                          ),
+                          Wrap(
+                            spacing: 8,
+                            runSpacing: 8,
+                            children: product.sizes.map((s) {
+                              return SizeWidget(size: s);
+                            }).toList(),
+                          ),
+                        ],
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        product.hasStock
+                            ? Consumer2<UserManager, Product>(
+                                builder: (_, userManager, product, __) {
+                                  return SizedBox(
+                                    height: 44,
+                                    child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                          backgroundColor:
+                                              Theme.of(context).primaryColor),
+                                      onPressed:
+                                          product.selectedSize.name.isEmpty
+                                              ? null
+                                              : () {
+                                                  if (userManager.isLoggedIn) {
+                                                    context
+                                                        .read<CartManager>()
+                                                        .addToCart(product);
+                                                    Navigator.of(context)
+                                                        .pushNamed('/cart');
+                                                  } else {
+                                                    Navigator.of(context)
+                                                        .pushNamed('/login');
+                                                  }
+                                                },
+                                      child: Text(
+                                        userManager.isLoggedIn
+                                            ? 'Adicionar ao Carrinho'
+                                            : 'Entre para Comprar',
+                                        style: const TextStyle(fontSize: 18),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              )
+                            : const SizedBox()
+                      ],
+                    ),
+                  )
+                ],
+              ),
             ],
-          )),
+          ),
+          extendBodyBehindAppBar: true),
     );
   }
 }

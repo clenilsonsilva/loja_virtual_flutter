@@ -19,13 +19,15 @@ class HomeScreen extends StatelessWidget {
         children: [
           Container(
             decoration: const BoxDecoration(
-              gradient: LinearGradient(
+              gradient: SweepGradient(
                 colors: [
-                  Color.fromARGB(255, 211, 118, 130),
-                  Color.fromRGBO(168, 146, 140, 1),
+                  Colors.blue,
+                  Colors.green,
+                  Colors.yellow,
+                  Colors.red,
+                  Colors.blue
                 ],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
+                stops: [0.0, 0.25, 0.5, 0.75, 1],
               ),
             ),
           ),
@@ -85,7 +87,7 @@ class HomeScreen extends StatelessWidget {
                         valueColor: AlwaysStoppedAnimation(Colors.white),
                         backgroundColor: Colors.transparent,
                       ),
-                    ); 
+                    );
                   }
 
                   final List<Widget> children =

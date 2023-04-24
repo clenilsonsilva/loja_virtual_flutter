@@ -16,37 +16,57 @@ class AdminUsersScreen extends StatelessWidget {
     return Scaffold(
         drawer: const CustomDrawer(),
         appBar: AppBar(
-          backgroundColor: Theme.of(context).primaryColor,
+          backgroundColor: Colors.transparent,
           title: const Text('Usuarios'),
           centerTitle: true,
         ),
-        body: Consumer<AdminUsersManager>(
-          builder: (context, adminUserManager, child) {
-            return AlphabetListScrollView(
-              itemBuilder: (_, index) {
-                return ListTile(
-                  title: Text(
-                    adminUserManager.users[index].name,
-                    style: const TextStyle(
-                        fontWeight: FontWeight.w800, color: Colors.white),
-                  ),
-                  subtitle: Text(
-                    adminUserManager.users[index].email,
-                    style: const TextStyle(
-                        fontWeight: FontWeight.w800, color: Colors.white),
-                  ),
-                  onTap: () {
-                    context
-                        .read<AdminOrdersManager>()
-                        .setUserFilter(adminUserManager.users[index]);
-                    context.read<PageManager>().setPage(5);
+        body: Stack(
+          children: [
+            Container(
+              decoration: const BoxDecoration(
+                gradient: SweepGradient(
+                  colors: [
+                    Colors.blue,
+                    Colors.green,
+                    Colors.yellow,
+                    Colors.red,
+                    Colors.blue
+                  ],
+                  stops: [0.0, 0.25, 0.5, 0.75, 1],
+                ),
+              ),
+            ),
+            Consumer<AdminUsersManager>(
+              builder: (context, adminUserManager, child) {
+                return AlphabetListScrollView(
+                  itemBuilder: (_, index) {
+                    return ListTile(
+                      title: Text(
+                        adminUserManager.users[index].name,
+                        style: const TextStyle(
+                            fontWeight: FontWeight.w800, color: Colors.white),
+                      ),
+                      subtitle: Text(
+                        adminUserManager.users[index].email,
+                        style: const TextStyle(
+                            fontWeight: FontWeight.w800, color: Colors.white),
+                      ),
+                      onTap: () {
+                        context
+                            .read<AdminOrdersManager>()
+                            .setUserFilter(adminUserManager.users[index]);
+                        context.read<PageManager>().setPage(5);
+                      },
+                    );
                   },
+                  indexedHeight: (index) => 100,
+                  strList: adminUserManager.names,
                 );
               },
-              indexedHeight: (index) => 100,
-              strList: adminUserManager.names,
-            );
-          },
-        ));
+            ),
+          ],
+        ),
+        extendBodyBehindAppBar: true,
+        );
   }
 }
