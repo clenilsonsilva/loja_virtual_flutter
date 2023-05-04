@@ -36,6 +36,9 @@ dependencies:
   credit_card_type_detector: ^3.0.0
   cloud_functions: ^4.1.1
   firebase_messaging: ^14.4.1
+  flutter_local_notifications: ^9.9.1
+  timezone: ^0.8.0
+  flutter_native_timezone: ^2.0.0
 
 dev_dependencies:
   flutter_test:

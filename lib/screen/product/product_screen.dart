@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:provider/provider.dart';
 
+import '../../helpers/gradient.dart';
 import '../../models/cart_manager.dart';
 import '../../models/product.dart';
 import '../../models/user_manager.dart';
@@ -44,20 +45,7 @@ class ProductScreen extends StatelessWidget {
           ),
           body: Stack(
             children: [
-              Container(
-                decoration: const BoxDecoration(
-                  gradient: SweepGradient(
-                    colors: [
-                      Colors.blue,
-                      Colors.green,
-                      Colors.yellow,
-                      Colors.red,
-                      Colors.blue
-                    ],
-                    stops: [0.0, 0.25, 0.5, 0.75, 1],
-                  ),
-                ),
-              ),
+              const Gradientt(),
               ListView(
                 children: [
                   CarouselSlider(

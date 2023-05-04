@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../common/Custom_drawer/custom_drawer.dart';
+import '../../helpers/gradient.dart';
 import '../../models/product_manager.dart';
 import '../../models/user_manager.dart';
 import 'components/products_list_tile.dart';
@@ -91,20 +92,7 @@ class ProductsScreen extends StatelessWidget {
       ),
       body: Stack(
         children: [
-          Container(
-            decoration: const BoxDecoration(
-              gradient: SweepGradient(
-                colors: [
-                  Colors.blue,
-                  Colors.green,
-                  Colors.yellow,
-                  Colors.red,
-                  Colors.blue
-                ],
-                stops: [0.0, 0.25, 0.5, 0.75, 1],
-              ),
-            ),
-          ),
+          const Gradientt(),
           Consumer<ProductManager>(
             builder: (context, value, child) {
               final filteredProducts = value.filteredProducts;

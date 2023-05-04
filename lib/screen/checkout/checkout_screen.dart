@@ -3,6 +3,7 @@ import 'package:loja_virtual/common/price_card.dart';
 import 'package:loja_virtual/models/credit_card.dart';
 import 'package:provider/provider.dart';
 
+import '../../helpers/gradient.dart';
 import '../../models/cart_manager.dart';
 import '../../models/ckeckout_manager.dart';
 import 'components/cpf_field.dart';
@@ -30,20 +31,7 @@ class CheckoutScreen extends StatelessWidget {
         ),
         body: Stack(
           children: [
-            Container(
-            decoration: const BoxDecoration(
-              gradient: SweepGradient(
-                colors: [
-                  Colors.blue,
-                  Colors.green,
-                  Colors.yellow,
-                  Colors.red,
-                  Colors.blue
-                ],
-                stops: [0.0, 0.25, 0.5, 0.75, 1],
-              ),
-            ),
-          ),
+            const Gradientt(),
             Consumer<CheckoutManager>(
               builder: (_, checkoutManager, child) {
                 if (checkoutManager.loading) {

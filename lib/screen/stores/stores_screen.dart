@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:loja_virtual/common/Custom_drawer/custom_drawer.dart';
-import 'package:loja_virtual/models/stores_manager.dart';
 import 'package:provider/provider.dart';
 
+import '../../common/Custom_drawer/custom_drawer.dart';
+import '../../helpers/gradient.dart';
+import '../../models/stores_manager.dart';
 import 'components/store_card.dart';
 
 class StoresScreen extends StatelessWidget {
@@ -19,20 +20,7 @@ class StoresScreen extends StatelessWidget {
       ),
       body: Stack(
         children: [
-          Container(
-            decoration: const BoxDecoration(
-              gradient: SweepGradient(
-                colors: [
-                  Colors.blue,
-                  Colors.green,
-                  Colors.yellow,
-                  Colors.red,
-                  Colors.blue
-                ],
-                stops: [0.0, 0.25, 0.5, 0.75, 1],
-              ),
-            ),
-          ),
+          const Gradientt(),
           Consumer<StoresManager>(
             builder: (_, storesManager, __) {
               if (storesManager.stores.isEmpty) {

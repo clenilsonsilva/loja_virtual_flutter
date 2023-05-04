@@ -3,6 +3,7 @@ import 'package:loja_virtual/models/home_manager.dart';
 import 'package:provider/provider.dart';
 
 import '../../common/Custom_drawer/custom_drawer.dart';
+import '../../helpers/gradient.dart';
 import '../../models/user_manager.dart';
 import 'components/add_section_widget.dart';
 import 'components/section_list.dart';
@@ -17,20 +18,7 @@ class HomeScreen extends StatelessWidget {
       drawer: const CustomDrawer(),
       body: Stack(
         children: [
-          Container(
-            decoration: const BoxDecoration(
-              gradient: SweepGradient(
-                colors: [
-                  Colors.blue,
-                  Colors.green,
-                  Colors.yellow,
-                  Colors.red,
-                  Colors.blue
-                ],
-                stops: [0.0, 0.25, 0.5, 0.75, 1],
-              ),
-            ),
-          ),
+          const Gradientt(),
           CustomScrollView(
             slivers: [
               SliverAppBar(
